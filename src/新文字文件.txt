@@ -1,0 +1,16 @@
+# Dictionary way to store lenth_distribution, but dictionary is not sorted
+    # length_distribution = {}
+    # for transaction in T:
+    #     length = len(transaction)
+    #     #length_distribution={length:0}
+    #     length_distribution.setdefault(length,0)
+    #     length_distribution[length] += 1
+    # print(length_distribution)
+    
+    # #Counter way to store, but we actually need from 1-itemset to n-itemsets
+    # C = Counter()
+    # for transaction in T:
+    #     C.update([len(transaction)])
+    # #dist= list(C) #only stores 'key'
+    # #print(dist)
+    # print(C)
