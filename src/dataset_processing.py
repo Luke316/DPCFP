@@ -1,6 +1,4 @@
 from collections import OrderedDict, Counter
-from copy import deepcopy
-from fractions import Fraction
 import math
 import numpy as np
 from random import sample
@@ -96,26 +94,25 @@ def Truncate(length, T):
     return Ts_truncated
 
 
-def TruncateDatabase(Dataset,epsilon):
-    T, n =ReadDataset(Dataset)
+def TruncateDatabase(dataset,epsilon,n):
     time_start = time()
-    number_of_diff_items, items = DifferentItemsCount(T)
-    noisy_length_distribution = EstimateDistribution(T, n, epsilon, number_of_diff_items)
+    number_of_diff_items, items = DifferentItemsCount(dataset)
+    noisy_length_distribution = EstimateDistribution(dataset, n, epsilon, number_of_diff_items)
     
     summation =0.0
-    length = 0.0
+    truncated_length = 0.0
     for index, noisy_count in enumerate(noisy_length_distribution, start=1) :
         summation += noisy_count
         if summation >= (0.85):
-            length = index
+            truncated_length = index
             break
     
-    print('length=',length)
+    print('truncated_length=',truncated_length)
     
-    T_truncated= Truncate(length,T)
+    T_truncated= Truncate(truncated_length,dataset)
     time_used = time() - time_start
     print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
-    return T_truncated, items
+    return T_truncated, items, truncated_length
 
 
 
@@ -125,8 +122,8 @@ if __name__ == '__main__': #if file wasn't imported.
 
     # To clarify, the initial dataset is called D
     # after reading the dataset, I call it T
-    #T, n = ReadDataset(D_name)
-    truncatedT, items = TruncateDatabase(D_name,0.05)
+    T, n = ReadDataset(D_name)
+    truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
 
     #print('number of transactions:{:d}'.format(n))
     #print('number of different items:{:d}'.format(items_count))
