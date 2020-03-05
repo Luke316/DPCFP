@@ -40,6 +40,7 @@ import csv
 #     return sorted_noisy_support, support
 
 def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPARM = 0.25
+    time_start=time()
     #init support with 0
     support = dict.fromkeys(items, 0) 
 
@@ -58,6 +59,8 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
         if (support[item] >= MIS_table[item]):
             #print('the support is bigger than MIS',item,'sup',support[item],'MIS',MIS_table[item])
             frequent_items[item] = support[item]
+        else:
+            frequent_items.pop(item,None)
 
     # sort the frequent item in ascending order
     sorted_frequent_items={k: v for k, v in sorted(frequent_items.items(), key=lambda item: item[1])}
@@ -69,11 +72,12 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
     #     for key in sorted_frequent_items.keys():
     #         f.write("%s,%s\n"%(key,sorted_frequent_items[key]))
 
-
+    time_used = time() - time_start
+    print('MISTable&frequent 1-itemset. Running time: {:.3f} seconds.'.format(time_used))
     return sorted_frequent_items, MIS_table
 
 if __name__ == '__main__': #if file wasn't imported.
     T, n = ReadDataset('T10I4D100K')
     truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
     MISTable(truncatedT,items,n,1,truncated_length,0.01,0.25)
-    print('preprocess')
+    #print('preprocess')
