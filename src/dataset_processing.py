@@ -107,9 +107,9 @@ def TruncateDatabase(dataset,epsilon,n):
             truncated_length = index
             break
     
-    print('truncated_length=',truncated_length)
-    
+    #print('truncated_length=',truncated_length)
     T_truncated= Truncate(truncated_length,dataset)
+    
     time_used = time() - time_start
     print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
     return T_truncated, items, truncated_length
