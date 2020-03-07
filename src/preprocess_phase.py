@@ -48,29 +48,36 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
     for transaction in T:
         for item in transaction:
             if item in items:
-                support[item]=support.get(item) + 1    
+                support[item]=support.get(item) + 1    #origin support
+    # test
+    with open('original_support.csv', 'w') as f:
+        for key in support.keys():
+            f.write("%s,%s\n"%(key,support[key]))
 
     sensitivity = truncated_length/n
     MIS_table = dict.fromkeys(items, 0)
     frequent_items = dict.fromkeys(items,1.1)
     for item in support.keys():
-        support[item] = support.get(item)/n + np.random.laplace(0, sensitivity / epsilon)
+        support[item] = support.get(item)/n + np.random.laplace(0, sensitivity / epsilon) # noisy support
         MIS_table[item] = max(beta*support[item],threshold) #if beta =0, the MIS is basically threshold and equals to FIM
         if (support[item] >= MIS_table[item]):
             #print('the support is bigger than MIS',item,'sup',support[item],'MIS',MIS_table[item])
             frequent_items[item] = support[item]
         else:
             frequent_items.pop(item,None)
+            MIS_table.pop(item,None)#???
 
     # sort the frequent item in ascending order
     sorted_frequent_items={k: v for k, v in sorted(frequent_items.items(), key=lambda item: item[1])}
 
     # test
-    # pprint (sorted_frequent_items)
-    # print('sorted frequent items =',len(sorted_frequent_items))
-    # with open('sorted_frequent_items.csv', 'w') as f:
-    #     for key in sorted_frequent_items.keys():
-    #         f.write("%s,%s\n"%(key,sorted_frequent_items[key]))
+    with open('noisy_support.csv', 'w') as f:
+        for key in support.keys():
+            f.write("%s,%s\n"%(key,support[key]))
+    # test
+    with open('sorted_frequent_items&support.csv', 'w') as f:
+        for key in sorted_frequent_items.keys():
+            f.write("%s,%s\n"%(key,sorted_frequent_items[key]))
 
     time_used = time() - time_start
     print('MISTable&frequent 1-itemset. Running time: {:.3f} seconds.'.format(time_used))
