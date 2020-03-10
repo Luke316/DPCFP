@@ -45,6 +45,7 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
     support = dict.fromkeys(items, 0) 
 
     #scan dataset to get origin support
+    #can use collections.Counter() to speed up 
     for transaction in T:
         for item in transaction:
             if item in items:
@@ -65,7 +66,6 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
             frequent_items[item] = support[item]
         else:
             frequent_items.pop(item,None)
-            MIS_table.pop(item,None)#???
 
     # sort the frequent item in ascending order
     sorted_frequent_items={k: v for k, v in sorted(frequent_items.items(), key=lambda item: item[1])}
