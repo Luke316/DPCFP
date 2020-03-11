@@ -100,7 +100,7 @@ def DFSTraversal(visited,graph,node):
         for neighbor in graph[node]:
             DFSTraversal(visited, graph, neighbor)
 
-DFSTraversal([],master,[1,2])
+
 
 
 
