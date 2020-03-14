@@ -50,7 +50,7 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
         for item in transaction:
             if item in items:
                 support[item]=support.get(item) + 1    #origin support
-    # test
+    # test original support
     with open('original_support.csv', 'w') as f:
         for key in support.keys():
             f.write("%s,%s\n"%(key,support[key]))
@@ -70,14 +70,18 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
     # sort the frequent item in ascending order
     sorted_frequent_items={k: v for k, v in sorted(frequent_items.items(), key=lambda item: item[1])}
 
-    # test
+    # test noisy support
     with open('noisy_support.csv', 'w') as f:
         for key in support.keys():
             f.write("%s,%s\n"%(key,support[key]))
-    # test
+    # test sorted noisy support
     with open('sorted_frequent_items&support.csv', 'w') as f:
         for key in sorted_frequent_items.keys():
             f.write("%s,%s\n"%(key,sorted_frequent_items[key]))
+    # test MIS
+    with open('MIStable.csv', 'w') as f:
+        for key in MIS_table.keys():
+            f.write("%s,%s\n"%(key,MIS_table[key]))
 
     time_used = time() - time_start
     print('MISTable&frequent 1-itemset. Running time: {:.3f} seconds.'.format(time_used))
