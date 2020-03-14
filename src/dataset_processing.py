@@ -125,6 +125,3 @@ if __name__ == '__main__': #if file wasn't imported.
     T, n = ReadDataset(D_name)
     truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
 
-    #print('number of transactions:{:d}'.format(n))
-    #print('number of different items:{:d}'.format(items_count))
-    #print(T)

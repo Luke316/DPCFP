@@ -2,10 +2,13 @@ from time import time
 from dataset_processing import TruncateDatabase, ReadDataset
 from preprocess_phase import MISTable
 from pprint import pprint
-import itertools
 import csv
+import numpy as np
+import copy 
 from anytree import NodeMixin, RenderTree
-from ordered_set import OrderedSet
+
+#from ordered_set import OrderedSet
+#import itertools
 
 # class FPMEtree:
 #     z=1
@@ -71,21 +74,26 @@ from ordered_set import OrderedSet
         
 #         #heuristic 1
         
-class FPMEtree:
+class FPMEtree():
     def __init__(self):
-        self.root = FPMETreeNode([],None,None)
+        self.root = FPMETreeNode([],0,0)
 
-    def add(self,transaction):
-        point = self.root
+    def add(self,transaction,MISTable,n,epsilon,length):
+        node = self.root
         for item in transaction:
-            # next_point = FPMETreeNode(item,None,None)
-            next_point = point.search(item)
-            
-            if not next_point:
-                next_point = FPMETreeNode(item,None,None)
-                next_point.parent = point
+            next_node = node.search(item)
+            MIS = MISTable.get(transaction[0])
 
-            point = next_point
+            
+            if not next_node:
+                next_node = FPMETreeNode(item,MIS,np.random.laplace(0, length/epsilon/n))
+                if next_node.sup<0:#is this DP?
+                    next_node.sup=0
+                next_node.parent = node
+
+            node = next_node
+        node.sup += 1/n
+
 
 class TreeNodeBase():
     z=1
@@ -110,17 +118,36 @@ class FPMETreeNode(TreeNodeBase,NodeMixin):
 
         return False
 
-# traverse to find FP
-# graph is a dict 
-def DFSTraversal(visited,graph,node):
-    if node not in visited:
-        print(node.name)
-        visited.append(node)
-        for neighbor in graph[node]:
-            DFSTraversal(visited, graph, neighbor)
+def Update(node):
+    for child in node.children:
+        Update(child)
+        node.sup += child.sup
 
-# support propagate to root 
-# def Propagate
+
+# traverse to find FP
+# postorder DFS traversal
+def Traversal(node):
+    frequent_itemsets= []
+    frequent_itemsets2= []
+
+    for child in node.children:
+        #print(child.name)
+        if child.sup>=child.MIS:
+            Traversal(child)
+            frequent_itemsets1= []
+            for path in child.path:
+                if path.name != []:
+                    #print(path.name)
+                    frequent_itemsets1.append(path.name)
+            frequent_itemsets2 = copy.copy(frequent_itemsets1)
+            frequent_itemsets.append(frequent_itemsets2)
+    
+            #print(frequent_itemsets2)
+            with open('output.csv','a+',newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(frequent_itemsets2)
+    
+
 
 # delete infrequent item in transactions and sort item by mistable in asending order
 def SortTransactions(dataset,sorted_frequent_items,MISTable):
@@ -162,7 +189,7 @@ def SortTransactions(dataset,sorted_frequent_items,MISTable):
 if __name__ == '__main__': 
     T, n = ReadDataset('retail')
     #T10I4D100K retail
-    truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
+    truncatedT, items, truncated_length = TruncateDatabase(T,1,n)
     sorted_frequent_items, MIS_table = MISTable(truncatedT,items,n,1,truncated_length,0.01,0.25)
     final_sorted_transactions = SortTransactions(truncatedT,sorted_frequent_items,MIS_table)
     #print([[i] for i in sorted_frequent_items])
@@ -171,13 +198,15 @@ if __name__ == '__main__':
     time_start = time()
 
     for transaction in final_sorted_transactions:
-        master.add(transaction)
+        master.add(transaction,MIS_table,n,1,truncated_length)
     time_used = time() - time_start
     print('FPMETree Constructed. Running time: {:.3f} seconds.'.format(time_used))
-
-
+    time_start = time()
+    Update(master.root)
+    time_used = time() - time_start
+    print('FPMETree Updated. Running time: {:.3f} seconds.'.format(time_used))
+    Traversal(master.root)
 
     # for pre, _, node in RenderTree(master.root):
-    #     treestr = u"%s%s " % (pre, node.name,)
-    #     # print(treestr.ljust(8), node.MIS, node.sup)
+    #     treestr = u"%s%s %s %s" % (pre, node.name,node.MIS, node.sup)
     #     print(treestr.ljust(8))
