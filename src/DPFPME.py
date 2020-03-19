@@ -1,7 +1,6 @@
 from time import time
 from dataset_processing import TruncateDatabase, ReadDataset
-from preprocess_phase import MISTable
-from pprint import pprint
+from preprocess_phase import MISTable, SortTransactions
 import csv
 import numpy as np
 import copy 
@@ -86,9 +85,7 @@ class FPMEtree():
 
             
             if not next_node:
-                next_node = FPMETreeNode(item,MIS,np.random.laplace(0, length/epsilon/n))
-                if next_node.sup<0:#is this DP?
-                    next_node.sup=0
+                next_node = FPMETreeNode(item,MIS,np.random.laplace(0, length/epsilon/n))            
                 next_node.parent = node
 
             node = next_node
@@ -121,91 +118,56 @@ class FPMETreeNode(TreeNodeBase,NodeMixin):
 def Update(node):
     for child in node.children:
         Update(child)
+        if child.sup<0:#is this DP?
+            child.sup=0
         node.sup += child.sup
 
 
 # traverse to find FP
-# postorder DFS traversal
+# DFS traversal
 def Traversal(node):
-    frequent_itemsets= []
-    frequent_itemsets2= []
-
-    for child in node.children:
-        #print(child.name)
-        if child.sup>=child.MIS:
-            Traversal(child)
-            frequent_itemsets1= []
-            for path in child.path:
-                if path.name != []:
-                    #print(path.name)
-                    frequent_itemsets1.append(path.name)
-            frequent_itemsets2 = copy.copy(frequent_itemsets1)
-            frequent_itemsets.append(frequent_itemsets2)
+    with open('output.csv','a',newline='') as f:
+        writer = csv.writer(f)
+        for child in node.children:
+            #print(child.name)
+            if child.sup>=child.MIS:
+                Traversal(child)
+                frequent_itemsets1= []
+                for path in child.path:
+                    if path.name != []:
+                        #print(path.name)
+                        frequent_itemsets1.append(path.name)
+                writer.writerow([frequent_itemsets1,child.sup])
     
-            #print(frequent_itemsets2)
-            with open('output.csv','a+',newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(frequent_itemsets2)
-    
-
-
-# delete infrequent item in transactions and sort item by mistable in asending order
-def SortTransactions(dataset,sorted_frequent_items,MISTable):
-    time_start = time()
-    final_transactions = []
-    itera =[] #not important
-    for transaction in dataset:
-        for item in transaction:
-            if item not in sorted_frequent_items:
-                continue
-            itera.append(item)
-        c = itera.copy()
-        final_transactions.append(c)
-        itera.clear()
-    
-    # with open('final_dataset.csv', 'w',newline="") as f:
-    # #     #for key in dataset.keys():
-    # #     #    f.write("%s,%s\n"%(key,dataset[key]))
-    #     writer = csv.writer(f)
-    #     writer.writerows(final_transactions)
-
-    final_sorted_transactions =[]
-    for transaction in final_transactions:
-        final_sorted_transactions.append(sorted(transaction,key = sorted_frequent_items.get))
-    
-    # with open('final_dataset_sorted.csv', 'w',newline="") as f:
-    # #     #for key in dataset.keys():
-    # #     #    f.write("%s,%s\n"%(key,dataset[key]))
-    #     writer = csv.writer(f)
-    #     writer.writerows(final_sorted_transactions)
-    
-
-    time_used = time() - time_start
-    print('Sort transasctions. Running time: {:.3f} seconds.'.format(time_used))
-    return final_sorted_transactions
-
 
 
 if __name__ == '__main__': 
-    T, n = ReadDataset('retail')
-    #T10I4D100K retail
-    truncatedT, items, truncated_length = TruncateDatabase(T,1,n)
+    dataset = 'retail'
+    print('Dataset = ' ,dataset)
+    T, n = ReadDataset(dataset)
+    #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS
+    truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
     sorted_frequent_items, MIS_table = MISTable(truncatedT,items,n,1,truncated_length,0.01,0.25)
     final_sorted_transactions = SortTransactions(truncatedT,sorted_frequent_items,MIS_table)
     #print([[i] for i in sorted_frequent_items])
     #FPMETree([],[[i] for i in sorted_frequent_items],4,MIS_table)
-    master = FPMEtree()
+    
     time_start = time()
-
+    master = FPMEtree()
     for transaction in final_sorted_transactions:
         master.add(transaction,MIS_table,n,1,truncated_length)
     time_used = time() - time_start
     print('FPMETree Constructed. Running time: {:.3f} seconds.'.format(time_used))
+    
     time_start = time()
     Update(master.root)
     time_used = time() - time_start
     print('FPMETree Updated. Running time: {:.3f} seconds.'.format(time_used))
+
+    time_start = time()
     Traversal(master.root)
+    time_used = time() - time_start
+    print('Traversal Finished . Running time: {:.3f} seconds.'.format(time_used))
 
     # for pre, _, node in RenderTree(master.root):
     #     treestr = u"%s%s %s %s" % (pre, node.name,node.MIS, node.sup)

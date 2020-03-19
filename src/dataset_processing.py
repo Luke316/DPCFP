@@ -1,5 +1,4 @@
 from collections import OrderedDict, Counter
-import math
 import numpy as np
 from random import sample
 from time import time
@@ -81,7 +80,7 @@ def EstimateDistribution(T,number_of_transactions,epsilon,number_of_diff_items )
 
     noisy_length_distribution = []
     for count in length_distribution:
-        noisy_count = max(count + np.random.laplace(0, 1 / epsilon), 0)/number_of_transactions  # add Laplace noise and set negative to 0
+        noisy_count = int(max(count + np.random.laplace(0, 1 / epsilon), 0))/number_of_transactions  # add Laplace noise and set negative to 0
         noisy_length_distribution.append(noisy_count)
     return noisy_length_distribution
 
