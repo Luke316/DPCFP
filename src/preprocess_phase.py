@@ -39,7 +39,7 @@ import csv
 #     #pprint (sorted_support)
 #     return sorted_noisy_support, support
 
-def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPARM = 0.25
+def MISTable(T, items,n,epsilon,truncated_length,threshold, beta=0.25): #beta in DPARM = 0.25
     time_start=time()
     #init support with 0
     support = dict.fromkeys(items, 0) 
@@ -71,21 +71,57 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta): #beta in DPAR
     sorted_frequent_items={k: v for k, v in sorted(frequent_items.items(), key=lambda item: item[1])}
 
     # test noisy support
-    with open('noisy_support.csv', 'w') as f:
-        for key in support.keys():
-            f.write("%s,%s\n"%(key,support[key]))
+    # with open('noisy_support.csv', 'w') as f:
+    #     for key in support.keys():
+    #         f.write("%s,%s\n"%(key,support[key]))
     # test sorted noisy support
-    with open('sorted_frequent_items&support.csv', 'w') as f:
-        for key in sorted_frequent_items.keys():
-            f.write("%s,%s\n"%(key,sorted_frequent_items[key]))
+    # with open('sorted_frequent_items&support.csv', 'w') as f:
+    #     for key in sorted_frequent_items.keys():
+    #         f.write("%s,%s\n"%(key,sorted_frequent_items[key]))
     # test MIS
-    with open('MIStable.csv', 'w') as f:
-        for key in MIS_table.keys():
-            f.write("%s,%s\n"%(key,MIS_table[key]))
+    # with open('MIStable.csv', 'w') as f:
+    #     for key in MIS_table.keys():
+    #         f.write("%s,%s\n"%(key,MIS_table[key]))
 
     time_used = time() - time_start
     print('MISTable&frequent 1-itemset. Running time: {:.3f} seconds.'.format(time_used))
     return sorted_frequent_items, MIS_table
+
+
+# delete infrequent item in transactions and sort item by mistable in asending order
+def SortTransactions(dataset,sorted_frequent_items,MISTable):
+    time_start = time()
+    final_transactions = []
+    itera =[] #not important
+    for transaction in dataset:
+        for item in transaction:
+            if item not in sorted_frequent_items:
+                continue
+            itera.append(item)
+        c = itera.copy()
+        final_transactions.append(c)
+        itera.clear()
+    
+    # with open('final_dataset.csv', 'w',newline="") as f:
+    # #     #for key in dataset.keys():
+    # #     #    f.write("%s,%s\n"%(key,dataset[key]))
+    #     writer = csv.writer(f)
+    #     writer.writerows(final_transactions)
+
+    final_sorted_transactions =[]
+    for transaction in final_transactions:
+        final_sorted_transactions.append(sorted(transaction,key = sorted_frequent_items.get))
+    
+    # with open('final_dataset_sorted.csv', 'w',newline="") as f:
+    # #     #for key in dataset.keys():
+    # #     #    f.write("%s,%s\n"%(key,dataset[key]))
+    #     writer = csv.writer(f)
+    #     writer.writerows(final_sorted_transactions)
+    
+
+    time_used = time() - time_start
+    print('Sort transasctions. Running time: {:.3f} seconds.'.format(time_used))
+    return final_sorted_transactions
 
 if __name__ == '__main__': #if file wasn't imported.
     T, n = ReadDataset('T10I4D100K')
