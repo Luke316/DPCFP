@@ -203,7 +203,6 @@ if __name__ == '__main__':
     name = '..\\reports\\'+ sys.argv[1] + '_apriori.csv'
     with open(name, 'a',newline = '') as f:
         writer=csv.writer(f)
-#        writer.writerows(k)
 
         for itemsets in F:
             for itemset in itemsets:

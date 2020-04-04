@@ -80,12 +80,14 @@ class FPMEtree():
     def add(self,transaction,MISTable,n,epsilon,length):
         node = self.root
         for item in transaction:
-            next_node = node.search(item)
+            next_node = node.Search(item)
             MIS = MISTable.get(transaction[0])
 
             
             if not next_node:
-                next_node = FPMETreeNode(item,MIS,np.random.laplace(0, length/epsilon/n))            
+                # next_node = FPMETreeNode(item,MIS,np.random.laplace(0, length/epsilon/n))
+                next_node = FPMETreeNode(item,MIS,0) #0328
+            
                 next_node.parent = node
 
             node = next_node
@@ -93,7 +95,9 @@ class FPMEtree():
 
 
 class TreeNodeBase():
-    z=1
+    # frequent_itemsets = []
+    frequent_itemsets = {}
+
 class FPMETreeNode(TreeNodeBase,NodeMixin):
     def __init__(self,name,MIS,sup,children=None,parent=None):
         self.name = name
@@ -103,7 +107,7 @@ class FPMETreeNode(TreeNodeBase,NodeMixin):
         if children :
             self.children = children
 
-    def search(self,item):
+    def Search(self,item):
         node_names =[]
         for node in self.children:
             node_names.append([node.name])
@@ -115,6 +119,27 @@ class FPMETreeNode(TreeNodeBase,NodeMixin):
 
         return False
 
+    # traverse to find FP
+    # DFS traversal
+    def Traverse(self):
+        with open('output3.csv','w',newline='') as f:
+            writer = csv.writer(f)
+            for child in self.children:
+                #print(child.name)
+                if child.sup>=child.MIS:
+                    child.Traverse()
+                    frequent_itemsets1= []
+                    for path in child.path:
+                        if path.name != []:
+                            #print(path.name)
+                            frequent_itemsets1.append(path.name)
+                    writer.writerow([frequent_itemsets1,child.sup])
+                    #self.frequent_itemsets.append(str(frequent_itemsets1))
+                    self.frequent_itemsets[str(frequent_itemsets1)]=child.sup
+        return self.frequent_itemsets
+
+
+
 def Update(node):
     for child in node.children:
         Update(child)
@@ -123,39 +148,20 @@ def Update(node):
         node.sup += child.sup
 
 
-# traverse to find FP
-# DFS traversal
-def Traversal(node):
-    with open('output.csv','a',newline='') as f:
-        writer = csv.writer(f)
-        for child in node.children:
-            #print(child.name)
-            if child.sup>=child.MIS:
-                Traversal(child)
-                frequent_itemsets1= []
-                for path in child.path:
-                    if path.name != []:
-                        #print(path.name)
-                        frequent_itemsets1.append(path.name)
-                writer.writerow([frequent_itemsets1,child.sup])
-    
-
-
 if __name__ == '__main__': 
-    dataset = 'retail'
+    dataset = 'accidents'
     print('Dataset = ' ,dataset)
     T, n = ReadDataset(dataset)
+    ep_1,ep_2,ep_3 = 0.05,0.5,1
     #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS
-    truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
-    sorted_frequent_items, MIS_table = MISTable(truncatedT,items,n,1,truncated_length,0.01,0.25)
+    truncatedT, items, truncated_length = TruncateDatabase(T,ep_1,n)
+    sorted_frequent_items, MIS_table = MISTable(truncatedT,items,n,ep_2,truncated_length,0.01,0.25)
     final_sorted_transactions = SortTransactions(truncatedT,sorted_frequent_items,MIS_table)
-    #print([[i] for i in sorted_frequent_items])
-    #FPMETree([],[[i] for i in sorted_frequent_items],4,MIS_table)
-    
+
     time_start = time()
     master = FPMEtree()
     for transaction in final_sorted_transactions:
-        master.add(transaction,MIS_table,n,1,truncated_length)
+        master.add(transaction,MIS_table,n,ep_3,truncated_length)
     time_used = time() - time_start
     print('FPMETree Constructed. Running time: {:.3f} seconds.'.format(time_used))
     
@@ -165,7 +171,7 @@ if __name__ == '__main__':
     print('FPMETree Updated. Running time: {:.3f} seconds.'.format(time_used))
 
     time_start = time()
-    Traversal(master.root)
+    master.root.Traverse()
     time_used = time() - time_start
     print('Traversal Finished . Running time: {:.3f} seconds.'.format(time_used))
 
