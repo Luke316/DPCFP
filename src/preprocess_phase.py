@@ -39,8 +39,8 @@ import csv
 #     #pprint (sorted_support)
 #     return sorted_noisy_support, support
 
-def MISTable(T, items,n,epsilon,truncated_length,threshold, beta=0.25): #beta in DPARM = 0.25
-    time_start=time()
+def MISTable(T, items,n,epsilon,truncated_length,threshold=0.01, beta=0.25): #beta in DPARM = 0.25
+    #time_start=time()
     #init support with 0
     support = dict.fromkeys(items, 0) 
 
@@ -51,15 +51,16 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta=0.25): #beta in
             if item in items:
                 support[item]=support.get(item) + 1    #origin support
     # test original support
-    with open('original_support.csv', 'w') as f:
-        for key in support.keys():
-            f.write("%s,%s\n"%(key,support[key]))
+    # with open('original_support.csv', 'w') as f:
+    #     for key in support.keys():
+    #         f.write("%s,%s\n"%(key,support[key]))
 
     sensitivity = truncated_length/n
     MIS_table = dict.fromkeys(items, 0)
     frequent_items = dict.fromkeys(items,1.1)
     for item in support.keys():
-        support[item] = support.get(item)/n + np.random.laplace(0, sensitivity / epsilon) # noisy support
+        #support[item] = support.get(item)/n + np.random.laplace(0, sensitivity / epsilon) # noisy support
+        support[item] = support.get(item)/n #0328
         MIS_table[item] = max(beta*support[item],threshold) #if beta =0, the MIS is basically threshold and equals to FIM
         if (support[item] >= MIS_table[item]):
             #print('the support is bigger than MIS',item,'sup',support[item],'MIS',MIS_table[item])
@@ -83,14 +84,14 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold, beta=0.25): #beta in
     #     for key in MIS_table.keys():
     #         f.write("%s,%s\n"%(key,MIS_table[key]))
 
-    time_used = time() - time_start
-    print('MISTable&frequent 1-itemset. Running time: {:.3f} seconds.'.format(time_used))
+    #time_used = time() - time_start
+    #print('MISTable&frequent 1-itemset. Running time: {:.3f} seconds.'.format(time_used))
     return sorted_frequent_items, MIS_table
 
 
-# delete infrequent item in transactions and sort item by mistable in asending order
+# delete infrequent item in transactions and sort item by MIStable in asending order
 def SortTransactions(dataset,sorted_frequent_items,MISTable):
-    time_start = time()
+    #time_start = time()
     final_transactions = []
     itera =[] #not important
     for transaction in dataset:
@@ -110,7 +111,7 @@ def SortTransactions(dataset,sorted_frequent_items,MISTable):
 
     final_sorted_transactions =[]
     for transaction in final_transactions:
-        final_sorted_transactions.append(sorted(transaction,key = sorted_frequent_items.get))
+        final_sorted_transactions.append(sorted(transaction,key = MISTable.get))
     
     # with open('final_dataset_sorted.csv', 'w',newline="") as f:
     # #     #for key in dataset.keys():
@@ -119,8 +120,8 @@ def SortTransactions(dataset,sorted_frequent_items,MISTable):
     #     writer.writerows(final_sorted_transactions)
     
 
-    time_used = time() - time_start
-    print('Sort transasctions. Running time: {:.3f} seconds.'.format(time_used))
+    #time_used = time() - time_start
+    #print('Sort transasctions. Running time: {:.3f} seconds.'.format(time_used))
     return final_sorted_transactions
 
 if __name__ == '__main__': #if file wasn't imported.

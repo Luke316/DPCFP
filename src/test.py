@@ -42,7 +42,9 @@ class FPMEtree:
 
 
 class TreeNodeBase():
-    z=1
+    #frequent_itemsets2 = []
+    frequent_itemsets2 ={}
+
 class FPMETreeNode(TreeNodeBase,NodeMixin):
     def __init__(self,name,MIS,sup,children=None,parent=None):
         self.name = name
@@ -72,7 +74,24 @@ class FPMETreeNode(TreeNodeBase,NodeMixin):
     #     #     self.update(child.children)
     #     for descendant in self.descendants:
     #         self.sup = self.sup + descendant.sup
-
+    def Traversal(self):
+        with open('output2.csv','a+',newline='') as f:
+            writer = csv.writer(f)
+            for child in self.children:
+                #print(child.name)
+                if child.sup>=child.MIS:
+                    child.Traversal()
+                    frequent_itemsets1= []
+                    for path in child.path:
+                        if path.name != []:
+                            #print(path.name)
+                            frequent_itemsets1.append(path.name)
+                    #print(frequent_itemsets2)
+                    writer.writerow([frequent_itemsets1,child.sup])
+                    #self.frequent_itemsets2.append(str(frequent_itemsets1))
+                    self.frequent_itemsets2[str(frequent_itemsets1)]= child.sup
+                    #writer.writerow([frequent_itemsets1,support[frequent_itemsets1]])
+        return self.frequent_itemsets2
     
 def Update(treenode):
     for child in treenode.children:
@@ -80,30 +99,20 @@ def Update(treenode):
         treenode.sup += child.sup
 
 
-def Traversal(node):
-    with open('output2.csv','a+',newline='') as f:
-        writer = csv.writer(f)
-        for child in node.children:
-            #print(child.name)
-            if child.sup>=child.MIS:
-                Traversal(child)
-                frequent_itemsets1= []
-                for path in child.path:
-                    if path.name != []:
-                        #print(path.name)
-                        frequent_itemsets1.append(path.name)
-                #print(frequent_itemsets2)
-                #with open('output.csv', 'w') as w:
-                writer.writerow([frequent_itemsets1,child.sup])
-                #writer.writerow([frequent_itemsets1,support[frequent_itemsets1]])
 
 
 
-transactions=[[1,2,3],[1,4,6],[1,2,4],[2,5,6],[1,2,3],[3,4,6],[1,2],[1,2,4,6,7]]
+
+transactions=[[1,2,3],[1,4,6],[1,2,4],[2,5,6],[1,2,3],[3,4,6],[1,2],[1,2,4,6],[]]
 dict1={1:1,2:1,3:2,4:2,5:3,6:3}
 
-master = FPMEtree()
+final_sorted_transactions =[]
 for transaction in transactions:
+    final_sorted_transactions.append(sorted(transaction,key = dict1.get))
+    print(final_sorted_transactions)
+
+master = FPMEtree()
+for transaction in final_sorted_transactions:
     master.add(transaction,dict1)
 
 #master.update()
@@ -114,7 +123,8 @@ for pre, _, node in RenderTree(master.root):
     treestr = u"%s%s ,%s, %s" % (pre, node.name , node.MIS ,node.sup)
     print(treestr.ljust(8))
 
-Traversal(master.root)
+print(master.root.Traversal())
+
 
 
 

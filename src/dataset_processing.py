@@ -80,7 +80,8 @@ def EstimateDistribution(T,number_of_transactions,epsilon,number_of_diff_items )
 
     noisy_length_distribution = []
     for count in length_distribution:
-        noisy_count = int(max(count + np.random.laplace(0, 1 / epsilon), 0))/number_of_transactions  # add Laplace noise and set negative to 0
+        #noisy_count = int(max(count + np.random.laplace(0, 1 / epsilon), 0))/number_of_transactions  # add Laplace noise and set negative to 0
+        noisy_count = count/number_of_transactions #0328
         noisy_length_distribution.append(noisy_count)
     return noisy_length_distribution
 
@@ -90,11 +91,12 @@ def Truncate(length, T):
     for transaction in T:
         truncated_transaction = sample(transaction, min(len(transaction), length))
         Ts_truncated.append(truncated_transaction)
-    return Ts_truncated
+    #return Ts_truncated 0328
+    return T
 
 
 def TruncateDatabase(dataset,epsilon,n):
-    time_start = time()
+    #time_start = time()
     number_of_diff_items, items = DifferentItemsCount(dataset)
     noisy_length_distribution = EstimateDistribution(dataset, n, epsilon, number_of_diff_items)
     
@@ -107,10 +109,10 @@ def TruncateDatabase(dataset,epsilon,n):
             break
     
     #print('truncated_length=',truncated_length)
-    T_truncated= Truncate(truncated_length,dataset)
+    T_truncated= Truncate(truncated_length,dataset) 
     
-    time_used = time() - time_start
-    print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
+    #time_used = time() - time_start
+    #print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
     return T_truncated, items, truncated_length
 
 
