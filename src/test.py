@@ -1,5 +1,6 @@
 import pdb
 import itertools
+from itertools import combinations
 from anytree import NodeMixin, RenderTree
 from ordered_set import OrderedSet
 import numpy as np
@@ -66,6 +67,14 @@ class FPMETreeNode(TreeNodeBase,NodeMixin):
 
         return False
     
+    def search_path(self,item):
+        node_names =[]
+        for node in self.path:
+            node_names.append([node.name])
+            #print('og_child_names',node_names)
+
+        return self.path[node_names.index([item])]
+    
     # def update(self):
     #     # for child in self.children:
     #     #     print('child name = ', child.name)
@@ -109,7 +118,7 @@ dict1={1:1,2:1,3:2,4:2,5:3,6:3}
 final_sorted_transactions =[]
 for transaction in transactions:
     final_sorted_transactions.append(sorted(transaction,key = dict1.get))
-    print(final_sorted_transactions)
+    #print(final_sorted_transactions)
 
 master = FPMEtree()
 for transaction in final_sorted_transactions:
@@ -118,12 +127,40 @@ for transaction in final_sorted_transactions:
 #master.update()
 Update(master.root)
 
+# permutation every path to leaf
+dict2 = {} #sup
+dict3 = {} #MIS
 
-for pre, _, node in RenderTree(master.root):
-    treestr = u"%s%s ,%s, %s" % (pre, node.name , node.MIS ,node.sup)
-    print(treestr.ljust(8))
+for leaf in master.root.leaves:# tuple of all leaf node
+    print(leaf.name)
+    a=[]
+    b=[]
+    for node in leaf.path:    
+        if node.name != []:
+            a.append(node.name)
+    print(a)
+    
+    for i in range(1,leaf.depth+1):
+        #print(list(itertools.combinations(leaf.path,i)))
+        for combs in itertools.combinations(a,i):
+            
+            #dict2[combs] = leaf.search_path(combs[-1]).sup
+            dict2[combs] = leaf.sup            
+            dict3[combs] = leaf.search_path(combs[0]).MIS
+    
 
-print(master.root.Traversal())
+    print(dict2)
+    print(dict3)
+
+    
+    
+
+
+# for pre, _, node in RenderTree(master.root):
+#     treestr = u"%s%s ,%s, %s" % (pre, node.name , node.MIS ,node.sup)
+#     print(treestr.ljust(8))
+
+#print(master.root.Traversal())
 
 
 
