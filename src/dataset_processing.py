@@ -71,6 +71,7 @@ def DifferentItemsCount(dataset):
     items_count = len(items)
     return items_count, items
 
+
 def EstimateDistribution(T,number_of_transactions,epsilon,number_of_diff_items ):
     #get z_1 to z_n in Alg.1 line 9
     length_distribution = [0] * number_of_diff_items
@@ -91,8 +92,7 @@ def Truncate(length, T):
     for transaction in T:
         truncated_transaction = sample(transaction, min(len(transaction), length))
         Ts_truncated.append(truncated_transaction)
-    #return Ts_truncated 0328
-    return T
+    return Ts_truncated 
 
 
 def TruncateDatabase(dataset,epsilon,n):
@@ -114,7 +114,6 @@ def TruncateDatabase(dataset,epsilon,n):
     #time_used = time() - time_start
     #print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
     return T_truncated, items, truncated_length
-
 
 
 if __name__ == '__main__': #if file wasn't imported.
