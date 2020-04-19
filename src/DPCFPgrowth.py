@@ -11,10 +11,9 @@ import pdb
 
 
 class MIStree():
-    header_table = {}
-
     def __init__(self):
-        self.root = MISTreeNode([],0,0)
+        self.header_table = {}
+        self.root = MISTreeNode([],0)#name,sup
 
     def AddTransaction(self,transaction,n,epsilon,length):
         node = self.root
@@ -22,49 +21,43 @@ class MIStree():
             next_node = node.SearchChildNode(item)
             
             if not next_node:
-                # next_node = MISTreeNode(item,np.random.laplace(0, length/epsilon/n))
-                next_node = MISTreeNode(item,0) #0328
+                if epsilon!=0:
+                    next_node = MISTreeNode(item,np.random.laplace(0, length/epsilon/n))
+                else:
+                    next_node = MISTreeNode(item,0) #0328
                 next_node.parent = node
                 self.UpdateHeaderTable(next_node)
 
             node = next_node
         node.sup += 1/n
     
-    def AddPrefixPath(self,prefixPath,supportBeta,LMS):
+    def addPrefixPath(self,prefixPath,supportBeta,LMS):
+        # the last element of the prefixpath contains the path support
         pathCount = prefixPath[-1].sup
         node = self.root
-        for item in prefixPath:
 
-            #pdb.set_trace()
+        for item in prefixPath:
             if item == prefixPath[-1]:
                 continue
             if supportBeta[item.name]<LMS :
                 continue
             
-            
-            
-            next_node = node.SearchChildNode(item)
-            
+            next_node = node.SearchChildNode(item.name)
             if not next_node:
-                next_node = MISTreeNode(item,pathCount)
+                next_node = MISTreeNode(item.name,pathCount)
                 next_node.parent = node
                 self.UpdateHeaderTable(next_node)
-                node = next_node
             else:
-                node.sup += pathCount
-                node = next_node
+                next_node.sup += pathCount
+            
+            node = next_node
 
-        
-    def UpdateHeaderTable(self,node):#node-link
+    #node-link    
+    def UpdateHeaderTable(self,node):
         if node.name not in self.header_table:
             self.header_table[node.name] = [node]
         else:
             self.header_table[node.name].append(node)
-
-    # def InfrequentLeafNodePruning(self, support , sorted_MIS_table):
-    #     for item in support.keys():
-    #         if support[item] < sorted_MIS_table[item]:
-    #             if item
                 
 
 class TreeNodeBase():
@@ -75,20 +68,16 @@ class MISTreeNode(TreeNodeBase,NodeMixin):
     def __init__(self,name,sup,children=None,parent=None):
         self.name = name
         self.sup = sup
-        self.parent = parent
-        
+        self.parent = parent        
         if children :
             self.children = children
         
-
     def SearchChildNode(self,item):
         node_names =[]
         for node in self.children:
             node_names.append([node.name])
-            #print('og_child_names',node_names)
 
             if [item] in node_names:
-                #print('index=',node_names.index([item]))
                 return self.children[node_names.index([item])]
 
         return False
@@ -106,65 +95,68 @@ def CFPGrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
     # if the tree only has one item and it only contains one path, check frequent
     if len(tree.header_table) == 1: 
         if len(tree.header_table[items[0]]) == 1:
-            if support[items[0]] > MISTable[items[0]]:
-                frequent_itemsets[items[0]]= support[items[0]]
-
+            if support[items[0]] >= MISTable[prefix[-1]]:
+                itemset = prefix +items
+                itemset.sort()                
+                frequent_itemsets[str(itemset)]= support[items[0]]
         else: 
             cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS)
-
     else:
         cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS)
 
        
 def cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
     items = list(tree.header_table.keys())
-    for item in items:
-        #pdb.set_trace()
-        print(item)
-        pdb.set_trace()
-        if support[item]<MISTable[item]:
+    for item in items:  
+        MIS = MISTable[item] if(len(prefix))==0 else MISTable[prefix[-1]]
+        
+        if support[item]<MIS:
             continue
                     
-        betaSup = prefixSup if (prefixSup < support[item]) else support[item]
-        if support[item]>=MISTable[item]:#unnecessary
-            frequent_itemsets[item]= betaSup
+        betaSup = prefixSup if prefixSup < support[item] else support[item]
+        if support[item]>=MIS:
+            i = []
+            i.append(item)
+            itemset = prefix+i
+            itemset.sort()
+            frequent_itemsets[str(itemset)]= betaSup          
         
-        #add prefixPaths 
+        #add beta's prefixPaths a.k.a conditional pattern base
         prefixPaths = []#list of path tuples
         for node in tree.header_table[item]:
             prefixPaths.append(node.path[1:])#tuple of nodes # neglect the null root
-        
+
         # get support of the items in the prefixpath
         supportBeta = {}
         for prefixPath in prefixPaths:
             pathCount = prefixPath[-1].sup
             for node in prefixPath:
+                
                 if node != prefixPath[-1]:
                     if node.name not in supportBeta:
                         supportBeta[node.name] = pathCount
                     else:
-                        supportBeta[node.name] += pathCount
+                        supportBeta[node.name] = supportBeta[node.name] + pathCount
 
         #construct beta's conditional tree
         betaTree = MIStree()
-        for prefixPath in prefixPaths:
-            betaTree.AddPrefixPath(prefixPath,supportBeta,LMS)
+        for prefixPath in prefixPaths:#prefixPath is a tuple
+            betaTree.addPrefixPath(prefixPath,supportBeta,LMS)
 
-        if (len(betaTree.root.children) > 0):
-		# create beta
-            #pdb.set_trace()
+        # for pre, _, node in RenderTree(betaTree.root):
+        #     treestr = u"%s%s , %s" % (pre, node.name ,node.sup)
+        #     print(treestr.ljust(8))        
 
-            beta = prefix.append(item)
-
+        if len(betaTree.root.children) > 0:
+		    # create beta
+            beta = list(prefix)
+            beta.insert(0,item)
             CFPGrowth(betaTree,beta,betaSup,MISTable,supportBeta,frequent_itemsets,LMS)
-
-
-        
 
 
 
 if __name__ == '__main__':
-    dataset = 'retail'
+    dataset = 'BMS1'
     print('Dataset = ' ,dataset)
     T, n = ReadDataset(dataset)
     ep_1,ep_2,ep_3 = 0.05,0.5,1
@@ -189,8 +181,8 @@ if __name__ == '__main__':
     frequent_itemsets={}
     CFPGrowth(master, [], n,sorted_MIS_table,support,frequent_itemsets,LMS)
     # test mining result
-    with open('mining_result.csv', 'w') as f:
-        for key in frequent_itemsets.keys():
-            f.write("%s,%s\n"%(key,frequent_itemsets[key]))
+    # with open('mining_result.csv', 'w') as f:
+    #     for key in frequent_itemsets.keys():
+    #         f.write("%s,%s\n"%(key,frequent_itemsets[key]))
     time_used = time() - time_start
-    print('Traversal Finished . Running time: {:.3f} seconds.'.format(time_used))
+    print('CFPGrowth++ Finished . Running time: {:.3f} seconds.'.format(time_used))

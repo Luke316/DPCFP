@@ -27,8 +27,10 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold=0.01, beta=0.25): #be
     sensitivity = truncated_length/n
     MIS_table = dict.fromkeys(items, 0)
     for item in support.keys():
-        #support[item] = support.get(item)/n + np.random.laplace(0, sensitivity / epsilon) # noisy support
-        support[item] = support.get(item)/n #0328
+        if epsilon!=0:
+            support[item] = support.get(item)/n + np.random.laplace(0, sensitivity / epsilon) # noisy support
+        else:
+            support[item] = support.get(item)/n #0328
         MIS_table[item] = max(beta*support[item],threshold) #if beta =0, the MIS is basically threshold and equals to FIM
     
     sorted_MIS_table={k: v for k, v in sorted(MIS_table.items(), key=lambda item: item[1],reverse = True)}#descending order
@@ -42,7 +44,7 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold=0.01, beta=0.25): #be
         else :
             LMS = sorted_MIS_table[key]
             break
-    
+
     for key in list(sorted_MIS_table):
         if support[key]<LMS:
             support.pop(key)

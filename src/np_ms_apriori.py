@@ -196,17 +196,20 @@ if __name__ == '__main__':
     #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS
     T, n = ReadDataset(sys.argv[1])
 
-    rho, lam, phi = 0.25, 0.01, 0.4
+    rho, lam, phi = 0.25, 0.01, 1
     MS = assign_MIS(T, n, rho, lam)
     F, F_sup, info = ms_apriori_FIM(T, n, MS, phi)
     
-    name = '..\\reports\\'+ sys.argv[1] + '_apriori.csv'
-    with open(name, 'a',newline = '') as f:
+    #name = '..\\reports\\ground_truth\\'+ sys.argv[1] + '_apriori.csv'
+    name = '..\\reports\\ground_truth\\'+ sys.argv[1] + '_apriori_without_phi.csv'
+
+    with open(name, 'w',newline = '') as f:
         writer=csv.writer(f)
 
         for itemsets in F:
             for itemset in itemsets:
                 a = list(itemset)
+                a.sort()
                 #print (a,F_sup[itemset])
                 writer.writerow([a,F_sup[itemset]])
 
