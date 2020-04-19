@@ -1,6 +1,8 @@
 # DPFPME
 This is the code of the DPFPME
 ## Requirements
+0. Python 3
+
 1. Anytree https://anytree.readthedocs.io/en/2.8.0/installation.html
 ```
 python pip install anytree
