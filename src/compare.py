@@ -36,7 +36,7 @@ def compare2(NP,P):
     print('Recall =', recall)
     print('F-Score =', 2*(precision*recall)/(precision+recall))
     
-def compare(dataset, times, k):
+def compare(dataset, times):
 
     non_private = {}
     NP_dataset='..\\reports\\ground_truth\\' + dataset + '_apriori_without_phi.csv'
@@ -52,7 +52,6 @@ def compare(dataset, times, k):
     recalls =    ['Recall    ']
     f_scores =   ['F Score   ']
     RE =         ['RE        ']
-    K.append('{:.12f}'.format(k))
 
 
     with open ('..\\reports\\'+dataset+'privacy_vs_utility.txt', 'w', newline='') as f:
@@ -65,28 +64,29 @@ def compare(dataset, times, k):
         ep_2: for collecting support and MIS
         ep_3: for MIS tree node
         '''
-        for ep_1 in range(5,8):#5-8
-            for ep_2 in range(2,19,4):
-                for ep_3 in range(2,19,4):
-                    for threshold in range(10,21,5):#10,31,5
+        for ep_1 in range(5,6):#5-8
+            for ep_2 in range(6,11,4):#2,11,4
+                for ep_3 in range(6,19,4):#2,19,4
+                    for threshold in range(10,11):#10,31,5 # BMS2 threshold cannot surpass 0.02
+                        for k in range(100,151,50):#50,201,50
                         #sum_precision, sum_recall, sum_F_score = metrics(dataset,0,0,0,times,non_private)
-                        time_start = time()
-                        sum_precision, sum_recall, sum_F_score, sum_RE = metrics(dataset,ep_1 /100,ep_2 /10,ep_3 /10,times,non_private,k,threshold/1000)
-                        # epsilons.append('({:.2f}/{:.1f}/{:.1f})'.format(ep_1 /100,ep_2 /10,ep_3 /10))
-                        # precisions.append('{:.12f}'.format(sum_precision/times))
-                        # recalls.append('{:.12f}'.format(sum_recall/times))
-                        # f_scores.append('{:.12f}'.format(sum_F_score/times))
-                        # RE.append('{:.12f}'.format(sum_RE/times))
-                        # Threshold.append('{:.12f}'.format(threshold/1000))
-                        print('Running time: {:.4f} seconds.'.format(time() - time_start))
+                            time_start = time()
+                            sum_precision, sum_recall, sum_F_score, sum_RE = metrics(dataset,ep_1 /100,ep_2 /10,ep_3 /10,times,non_private,k,threshold/1000)
+                            # epsilons.append('({:.2f}/{:.1f}/{:.1f})'.format(ep_1 /100,ep_2 /10,ep_3 /10))
+                            # precisions.append('{:.12f}'.format(sum_precision/times))
+                            # recalls.append('{:.12f}'.format(sum_recall/times))
+                            # f_scores.append('{:.12f}'.format(sum_F_score/times))
+                            # RE.append('{:.12f}'.format(sum_RE/times))
+                            # Threshold.append('{:.12f}'.format(threshold/1000))
+                            print('Running time: {:.4f} seconds.'.format(time() - time_start))
 
-                        writer.writerow(['K         ',k])
-                        writer.writerow(['Epsilons  ','({:.2f}/{:.1f}/{:.1f})'.format(ep_1 /100,ep_2 /10,ep_3 /10)])
-                        writer.writerow(['Threshold ','{:.12f}'.format(threshold/1000)])
-                        writer.writerow(['Precision ','{:.12f}'.format(sum_precision/times)])
-                        writer.writerow(['Recall    ','{:.12f}'.format(sum_recall/times)])
-                        writer.writerow(['F-score   ','{:.12f}'.format(sum_F_score/times)])
-                        writer.writerow(['RE        ','{:.12f}'.format(sum_RE/times)])
+                            writer.writerow(['K         ',k])
+                            writer.writerow(['Epsilons  ','({:.2f}/{:.1f}/{:.1f})'.format(ep_1 /100,ep_2 /10,ep_3 /10)])
+                            writer.writerow(['Threshold ','{:.12f}'.format(threshold/1000)])
+                            writer.writerow(['Precision ','{:.12f}'.format(sum_precision/times)])
+                            writer.writerow(['Recall    ','{:.12f}'.format(sum_recall/times)])
+                            writer.writerow(['F-score   ','{:.12f}'.format(sum_F_score/times)])
+                            writer.writerow(['RE        ','{:.12f}'.format(sum_RE/times)])
                         
 
 def metrics(dataset,ep_1,ep_2,ep_3,times,non_private,k,threshold):
@@ -175,7 +175,7 @@ def metrics(dataset,ep_1,ep_2,ep_3,times,non_private,k,threshold):
             else :
                 RE = 1
 
-        # print('RE =', RE)
+        print('RE =', RE)
         sum_RE += RE
 
 
@@ -190,13 +190,12 @@ if __name__ == '__main__':
     #compare (sys.argv[1],5)
     #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS 
     # accidents is too big
-    for k in range(50,201,50):
-        compare('BMS2',10,k) # threshold cannot surpass 0.02
-        #compare('BMS1',10,k)
-        # compare('retail',10,k)
-        # compare('T10I4D100K',10,k)
-        #compare('kosarak',10,k)
-        # compare('BMS-POS',10,k)
+    # compare('BMS2',10) 
+    # compare('BMS1',10)
+    # compare('retail',2)
+    compare('T10I4D100K',3)
+    compare('kosarak',3)
+    compare('BMS-POS',3)
 
     #NP_dataset='..\\reports\\ground_truth\\' + sys.argv[1] + '_apriori.csv'
     #P_datasaet = 'output.csv'

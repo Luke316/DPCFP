@@ -85,9 +85,10 @@ class MISTreeNode(TreeNodeBase,NodeMixin):
 def Update(node):
     for child in node.children:
         Update(child)
+        node.sup += child.sup
         if child.sup<0:#is this DP?
             child.sup=0
-        node.sup += child.sup
+        #node.sup += child.sup
 
 def CFPGrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
     items = list(tree.header_table.keys())
@@ -156,14 +157,17 @@ def cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
 
 
 if __name__ == '__main__':
-    dataset = 'BMS1'
+    dataset = 'BMS-POS'
     print('Dataset = ' ,dataset)
+    time_start = time()
     T, n = ReadDataset(dataset)
     ep_1,ep_2,ep_3 = 0.05,0.5,1
     #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS
     truncatedT, items, truncated_length = TruncateDatabase(T,ep_1,n)
     sorted_MIS_table, support, LMS = MISTable(truncatedT,items,n,ep_2,truncated_length,0.01,0.25)
     final_sorted_transactions = SortTransactions(truncatedT,sorted_MIS_table)
+    print('MIS Found and Transactions Sorted. Running time: {:.3f} seconds.'.format(time()-time_start))
+
 
     time_start = time()
     master = MIStree()
