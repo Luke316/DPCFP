@@ -1,4 +1,4 @@
-# DPFPME
+# DPCFP
 This is the code of the DPFPME
 ## Requirements
 0. Python 3
