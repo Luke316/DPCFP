@@ -22,7 +22,7 @@ class MIStree():
             
             if not next_node:
                 if epsilon!=0:
-                    next_node = MISTreeNode(item,np.random.laplace(0, length/epsilon/n))
+                    next_node = MISTreeNode(item,np.random.laplace(0, scale = (1/n)/epsilon))
                 else:
                     next_node = MISTreeNode(item,0) #0328
                 next_node.parent = node
@@ -32,7 +32,7 @@ class MIStree():
         node.sup += 1/n
     
     def addPrefixPath(self,prefixPath,supportBeta,LMS):
-        # the last element of the prefixpath contains the path support
+        # the last element of the prefixpath contains the path minimum support
         pathCount = prefixPath[-1].sup
         node = self.root
 
@@ -157,16 +157,16 @@ def cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
 
 
 if __name__ == '__main__':
-    dataset = 'BMS-POS'
+    dataset = 'retail'
     print('Dataset = ' ,dataset)
-    time_start = time()
+    time_start1 = time()
     T, n = ReadDataset(dataset)
-    ep_1,ep_2,ep_3 = 0.05,0.5,1
-    #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS
+    ep_1,ep_2,ep_3 = 0.05,0.02,0.03
+    #T10I4D100K retail kosarak BMS1 BMS2 BMS-POS
     truncatedT, items, truncated_length = TruncateDatabase(T,ep_1,n)
     sorted_MIS_table, support, LMS = MISTable(truncatedT,items,n,ep_2,truncated_length,0.01,0.25)
     final_sorted_transactions = SortTransactions(truncatedT,sorted_MIS_table)
-    print('MIS Found and Transactions Sorted. Running time: {:.3f} seconds.'.format(time()-time_start))
+    print('MIS Found and Transactions Sorted. Running time: {:.3f} seconds.'.format(time()-time_start1))
 
 
     time_start = time()
@@ -190,3 +190,4 @@ if __name__ == '__main__':
     #         f.write("%s,%s\n"%(key,frequent_itemsets[key]))
     time_used = time() - time_start
     print('CFPGrowth++ Finished . Running time: {:.3f} seconds.'.format(time_used))
+    print('Total Running time: {:.3f} seconds.'.format(time()-time_start1))
