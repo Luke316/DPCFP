@@ -1,0 +1,135 @@
+\documentclass{article}
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithmicx,algorithm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+ 
+
+\begin{document}
+
+\begin{algorithm}[t]
+    \caption{TruncateDatabase} %算法的名字
+    \hspace*{0.02in} {\bf Input:} %算法的输入， \hspace*{0.02in}用来控制位置，同时利用 \\ 进行换行
+    database $D$; privacy budget $\varepsilon_1$;\\
+    \hspace*{0.02in} {\bf Output:} %算法的结果输出
+    truncated database $D'$
+    
+    \begin{algorithmic}[1]
+    \State Read D to get the Item Universe $I$, number of transactions $n$
+    \State $z'$ = {EstimateDistribution}{($D$,$\varepsilon_1$,$|I|$)}
+    \State Let $l$ be the smallest integer such that  $\sum_{i=1}^l$$z_i$ $\ge$ 0.85
+    \For{each transaction $t$ in $D$}
+        \State add $t'$ = RandomTruncate($t$,$l$) to D'
+    \EndFor 
+
+    \State \Return $D'$
+
+     
+    \Function{EstimateDistribution}{$D$,$\varepsilon_1$,$n$} 
+    \State Let $z = [ z_1, z_2, z_3,...,z_{|I|}]$, 
+    where\ $z_i$\ is\ the\ number\ of\ transactions\ with\ cardinality\ $i$\ in $D$
+    \State $z' = z + [Lap_1,Lap_2,Lap_3,...,Lap_{|I|}]$, where $Lap_i$ is drawn i.i.d. from Laplace noise $(\frac{\bigtriangleup}{\varepsilon_1})$
+    \State \Return $\frac{z'}{n}$
+    \EndFunction
+
+    \Function{RandomTruncate}{$t$,$l$}
+    \State $t'$ = Random Sample min({$|t|$,$l$}) item from t
+    \State \Return $t'$
+    \EndFunction    
+
+    
+    \end{algorithmic}
+    
+\end{algorithm}
+
+\begin{algorithm}[t]
+    \caption{FrequentItemsAndMISTable}
+    \hspace*{0.02in} {\bf Input:} %算法的输入， \hspace*{0.02in}用来控制位置，同时利用 \\ 进行换行
+    database $D'$; privacy budget $\varepsilon_2$; sensitivity $\bigtriangleup$; portion parameter $\beta$; threshold $\lambda$\\
+    \hspace*{0.02in} {\bf Output:} %算法的结果输出
+    Frequent 1-itemset $F_1$; MISTable $M$
+
+    \begin{algorithmic}[1]
+        % \State M $\leftarrow$ alphabet
+        \For {each transaction in $D'$}
+            \For {each item $X$ in transaction}
+                \State $X.sup++$                 
+            \EndFor    
+            \State {\bf end for}
+        \EndFor
+        \State {\bf end for}
+
+        \For {each item $X$ in $I$}
+        \State $X.sup'$ = $X.sup + Lap(\frac{\bigtriangleup}{\varepsilon_2})$
+        \State add $X$ and $X.MIS$ = $max\{ \beta * X.sup', \lambda\}$ to $M$
+            \If {${X.sup' \ge X.MIS}$}
+            \State add $X$ to $F$
+            \EndIf
+        \EndFor
+        \State {\bf end for}
+        
+    \State \Return $F_1$; $M$
+    \end{algorithmic} 
+
+\end{algorithm}
+
+
+
+\begin{algorithm}[t]
+    \caption{NoisyFP-MEtree}
+    \hspace*{0.02in} {\bf Input:} 
+    truncated database $D'$; frequent 1-itemset $F_1$; MISTable $M$; sensitivity $\bigtriangleup$; privacy budget $\varepsilon_3$;\\
+    \hspace*{0.02in} {\bf Output:} %算法的结果输出
+    Frequent Itemsets $F$
+
+    \begin{algorithmic}[1]
+        
+        \For{each transaction $t'$ in $D'$}
+            \State neglect items that are not in $F_1$
+            \State sort $t'$ by M in ascending order
+        \EndFor 
+        \State {\bf end for}
+        
+        \State create FPME root node  $r\leftarrow \varnothing$ 
+        \For{each $t'$ in $D'$}
+            \For{each item in $t'$}
+            \If{no corresponding path in the tree}
+            \State create a node with sup = Lap($\frac{\bigtriangleup}{\varepsilon_3}$) 
+            \EndIf
+            \EndFor
+            \State {\bf end for}
+            \State increase the last node's sup by 1
+        \EndFor
+        \State {\bf end for}
+
+        \State Update the tree, parent node's sup = $\sum$ children's sup
+        \State DFS Traversal on the FPMEtree
+        \If{a node's sup $\ge$ a node's MIS}
+        \State add the node to $F$
+        \EndIf
+    \State \Return $F$
+    \end{algorithmic} 
+
+\end{algorithm}
+\end{document}
+
+
+% \begin{document}
+
+% \begin{algorithm}
+%     \caption{algorithm caption} %算法的名字
+    
+%     \begin{algorithmic}[1]
+%     \State $S \leftarrow 0$
+%     \State find me a job
+%     \If{some condition is true}
+%     \State do some processing
+%     \ElsIf{some other condition is true}
+%     \State do some different processing
+%     \ElsIf{some even more bizarre condition is met}
+%     \State do something else
+%     \Else
+%     \State do the default actions
+%     \EndIf
+%     \end{algorithmic}
+% \end{algorithm}

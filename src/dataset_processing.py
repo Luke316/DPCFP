@@ -106,7 +106,7 @@ def TruncateDatabase(dataset,epsilon,n):
     truncated_length = 0.0
     for index, noisy_count in enumerate(noisy_length_distribution, start=1) :
         summation += noisy_count
-        if summation >= (0.85):
+        if summation >= (0.95):
             truncated_length = index
             break
     
