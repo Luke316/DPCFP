@@ -38,7 +38,7 @@ def compare2(NP,P):
     print('Precision = ', precision)
     print('Recall =', recall)
     print('F-Score =', 2*(precision*recall)/(precision+recall))
-    
+# top-K    
 def compare(dataset, times):
 
     non_private = {}
@@ -104,7 +104,7 @@ def compare3(dataset,times,eps=1,k=0):
 
     sum_precision, sum_recall, sum_F_score, sum_number = metrics(dataset,ep_1,ep_2,ep_3,times,non_private,k,threshold)
 
-    with open ('..\\reports\\mine_all\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt', 'w', newline='') as f:
+    with open ('..\\reports\\mine_all\\0.95_2\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['K         ',k])
         writer.writerow(['Epsilons  ','({:.2f}/{:.2f}/{:.2f})'.format(ep_1,ep_2,ep_3)])
@@ -129,17 +129,24 @@ def plot(exp,dataset,):
         x = [0.1,0.55,1.0,1.45,1.9,2.35]
         y1 = []
         y2 = []
+        y3 = []
         for eps in x:
-            for i, row in enumerate(open('..\\reports\\mine_all\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.85\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==6:
                     row = row.strip('\n')                                 
                     y1.append(float(row.split(',')[1]))
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.95\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+                if i ==6:
+                    row = row.strip('\n')                                 
+                    y3.append(float(row.split(',')[1]))
             for i, row in enumerate(open('..\\..\\PrivBasis_python3\\reports\\'+dataset+'_eps_'+ str(eps) +'.txt')):
                 if i ==6:
                     row = row.strip('\n')                                 
                     y2.append(float(row.split(',')[1]))
-        plt.plot(x,y1,'s-',color = 'r', label="DPCFP++")
+        plt.plot(x,y1,'o-',color = 'k', label="DPCFP++ 0.85")
         plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
+        plt.plot(x,y3,'s-',color = 'r', label="DPCFP++ 0.95")
+
         plt.xlim(0.1,2.35)
         plt.ylim(0,1)
         plt.xticks(x,fontsize=20)
@@ -150,24 +157,29 @@ def plot(exp,dataset,):
         plt.legend(loc = "lower right", fontsize=20)
         plt.grid(True, ls='--')
 
-        plt.savefig('..\\reports\\mine_all\\figure\\'+exp+'_'+dataset+'.png')
-
 
     elif exp == 'Recall':
         x = [0.1,0.55,1.0,1.45,1.9,2.35]
         y1 = []
         y2 = []
+        y3 = []
         for eps in x:
-            for i, row in enumerate(open('..\\reports\\mine_all\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.85\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==5:
                     row = row.strip('\n')                                 
                     y1.append(float(row.split(',')[1]))
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.95\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+                if i ==5:
+                    row = row.strip('\n')                                 
+                    y3.append(float(row.split(',')[1]))
             for i, row in enumerate(open('..\\..\\PrivBasis_python3\\reports\\'+dataset+'_eps_'+ str(eps) +'.txt')):
                 if i ==5:
                     row = row.strip('\n')                                 
                     y2.append(float(row.split(',')[1]))
-        plt.plot(x,y1,'s-',color = 'r', label="DPCFP++")
+        plt.plot(x,y1,'o-',color = 'k', label="DPCFP++ 0.85")
         plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
+        plt.plot(x,y3,'s-',color = 'r', label="DPCFP++ 0.95")
+
         plt.xlim(0.1,2.35)
         plt.ylim(0,1)
         plt.xticks(x,fontsize=20)
@@ -178,24 +190,29 @@ def plot(exp,dataset,):
         plt.legend(loc = "lower right", fontsize=20)
         plt.grid(True, ls='--')
 
-        plt.savefig('..\\reports\\mine_all\\figure\\'+exp+'_'+dataset+'.png')
-
 
     elif exp == 'Precision':
         x = [0.1,0.55,1.0,1.45,1.9,2.35]
         y1 = []
         y2 = []
+        y3 = []
         for eps in x:
-            for i, row in enumerate(open('..\\reports\\mine_all\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.85\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==4:
                     row = row.strip('\n')                                 
                     y1.append(float(row.split(',')[1]))
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.95\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+                if i ==4:
+                    row = row.strip('\n')                                 
+                    y3.append(float(row.split(',')[1]))
             for i, row in enumerate(open('..\\..\\PrivBasis_python3\\reports\\'+dataset+'_eps_'+ str(eps) +'.txt')):
                 if i ==4:
                     row = row.strip('\n')                                 
                     y2.append(float(row.split(',')[1]))
-        plt.plot(x,y1,'s-',color = 'r', label="DPCFP++")
+        plt.plot(x,y1,'o-',color = 'k', label="DPCFP++ 0.85")
         plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
+        plt.plot(x,y3,'s-',color = 'r', label="DPCFP++ 0.95")
+
         plt.xlim(0.1,2.35)
         plt.ylim(0,1)
         plt.xticks(x,fontsize=20)
@@ -206,36 +223,33 @@ def plot(exp,dataset,):
         plt.legend(loc = "lower right", fontsize=20)
         plt.grid(True, ls='--')
 
-        plt.savefig('..\\reports\\mine_all\\figure\\'+exp+'_'+dataset+'.png')
-
-
 
     elif exp == 'Runtime':
         x = [0.1,0.55,1.0,1.45,1.9,2.35]
         if dataset == 'retail':
-            y1=[525.564,6.070,4.802,5.113,4.969,5.048]
-            y2=[4.613,4.688,4.851,5.103,5.413,5.837]
-            plt.ylim(0,1000)
+            y1=[10.707,3.193,3.172,3.123,3.063,3.028]
+            y2=[3.853,4.188,4.451,4.503,4.613,4.837]
+            plt.ylim(0,20)
         elif dataset == 'BMS1':
-            y1=[3.465,1.850,1.811,1.578,1.604,1.718]
+            y1=[0.906,0.831,0.844,0.835,0.863,0.834]
             y2=[3.886,3.964,3.899,3.812,3.917,4.429]
             plt.ylim(0,10)
         elif dataset == 'BMS2':
-            y1=[61.117,2.271,2.109,2.061,2.177,2.348]
-            y2=[3.997,4.037,4.476,4.380,4.299,4.523]
-            plt.ylim(0,70)
+            y1=[2.010,1.393,1.378,1.406,1.426,1.388]
+            y2=[3.497,3.557,3.676,3.680,3.831,3.723]
+            plt.ylim(0,10)
         elif dataset == 'BMS-POS':
-            y1=[173.929,83.267,72.374,71.147,71.134,68.511]
+            y1=[57.426,36.708,35.985,36.209,35.617,35.857]
             y2=[186.885,222.435,469.197,2474.838,7129.583,16272.668]
             plt.ylim(0,18000)
         elif dataset == 'kosarak':
-            y1=[42.525,50.249,47.112,50.456,50.106,45.757]
-            y2=[55.691,124.489,107.668,109.376,125.644,114.498]
-            plt.ylim(0,200)
+            y1=[32.832,32.466,32.276,32.612,32.343,32.323]
+            y2=[55.691,124.489,107.668,107.376,95.644,109.498]
+            plt.ylim(0,150)
         elif dataset == 'T10I4D100K':
-            y1=[63.272,57.188,54.843,53.049,56.026,52.896]
-            y2=[46.019,42.940,40.984,47.480,46.819,43.889]
-            plt.ylim(20,80)
+            y1=[30.619,19.691,19.458,19.273,19.085,19.237]
+            y2=[37.919,38.940,39.984,39.480,38.819,39.889]
+            plt.ylim(0,60)
         
         plt.plot(x,y1,'s-',color = 'r', label="DPCFP++")
         plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
@@ -249,8 +263,9 @@ def plot(exp,dataset,):
         plt.legend(loc = "lower right", fontsize=20)
         plt.grid(True, ls='--')
         # plt.show()
-
-        plt.savefig('..\\reports\\mine_all\\figure\\'+exp+'_'+dataset+'.png')
+    
+    plt.savefig('..\\reports\\mine_all\\0.95\\figure\\'+exp+'_'+dataset+'.png')
+    plt.savefig('..\\reports\\mine_all\\0.95\\figure\\'+exp+'_'+dataset+'.eps',format = 'eps')
 
 
         
@@ -284,9 +299,9 @@ def metrics(dataset,ep_1,ep_2,ep_3,times,non_private,k,threshold,beta=0.25):
         Update(master.root)
         frequent_itemsets={}
         CFPGrowth(master, [], n,sorted_MIS_table,support,frequent_itemsets,LMS)
-        # with open('..\\reports\\mine_all\\'+dataset+'_privacy_vs_utility_'+str(i)+'.csv', 'w',) as f:
-        #     for key in frequent_itemsets.keys():
-        #         f.write("%s,%s\n"%(key,frequent_itemsets[key]))
+        with open('..\\reports\\mine_all\\0.95_2\\'+dataset+'_privacy_vs_utility_'+str(i)+'.csv', 'w',) as f:
+            for key in frequent_itemsets.keys():
+                f.write("%s,%s\n"%(key,frequent_itemsets[key]))
         
         topk_private = Counter(frequent_itemsets)
         topk_non_private = Counter(non_private)

@@ -1,9 +1,9 @@
-PWD c:/Users/607/Desktop/testLatex
+PWD c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms
 INPUT d:/texlive/2019/texmf.cnf
 INPUT d:/texlive/2019/texmf-dist/web2c/texmf.cnf
 INPUT d:/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT c:/Users/607/Desktop/testLatex/test.tex
-OUTPUT c:/Users/607/Desktop/testLatex/test.log
+INPUT c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.tex
+OUTPUT c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.log
 INPUT d:/texlive/2019/texmf-dist/tex/latex/base/article.cls
 INPUT d:/texlive/2019/texmf-dist/tex/latex/base/article.cls
 INPUT d:/texlive/2019/texmf-dist/tex/latex/base/size10.clo
@@ -34,9 +34,9 @@ INPUT d:/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 INPUT d:/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 INPUT d:/texlive/2019/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 INPUT d:/texlive/2019/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
-INPUT c:/Users/607/Desktop/testLatex/test.aux
-INPUT c:/Users/607/Desktop/testLatex/test.aux
-OUTPUT c:/Users/607/Desktop/testLatex/test.aux
+INPUT c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.aux
+INPUT c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.aux
+OUTPUT c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.aux
 INPUT d:/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT d:/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT d:/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
@@ -53,9 +53,9 @@ INPUT d:/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT d:/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
 INPUT d:/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
 INPUT d:/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
-OUTPUT c:/Users/607/Desktop/testLatex/test.pdf
+OUTPUT c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.pdf
 INPUT d:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-INPUT c:/Users/607/Desktop/testLatex/test.aux
+INPUT c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.aux
 INPUT d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
 INPUT d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
