@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2020.2.13)  15 MAR 2020 22:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2020.2.13)  16 MAY 2020 22:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/607/Desktop/testLatex/test.tex
-(c:/Users/607/Desktop/testLatex/test.tex
+**c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.tex
+(c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.tex
 LaTeX2e <2020-02-02> patch level 1
 L3 programming layer <2020-02-11> (d:/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
@@ -121,7 +121,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count196
 \l__pdf_internal_box=\box49
-) (c:/Users/607/Desktop/testLatex/test.aux)
+) (c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.aux)
 \openout1 = `test.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -145,17 +145,17 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 LaTeX Font Info:    Trying to load font information for U+msb on input line 13.
  (d:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1{d:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] (c:/Users/607/Desktop/testLatex/test.aux) ) 
+) [1{d:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] (c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.aux) ) 
 Here is how much of TeX's memory you used:
  2133 strings out of 481242
- 27856 string characters out of 5921895
+ 28153 string characters out of 5921895
  267062 words of memory out of 5000000
  17421 multiletter control sequences out of 15000+600000
  534945 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 30i,4n,31p,316b,288s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,4n,31p,349b,288s stack positions out of 5000i,500n,10000p,200000b,80000s
 <d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on c:/Users/607/Desktop/testLatex/test.pdf (2 pages, 124357 bytes).
+Output written on c:/Users/607/Desktop/Research/DPCFP/conference_paper/algorithms/test.pdf (2 pages, 124357 bytes).
 PDF statistics:
  63 PDF objects out of 1000 (max. 8388607)
  45 compressed objects within 1 object stream

@@ -42,7 +42,7 @@ def compare(dataset,eps):
                     private[lines[0]] = float(lines[1])
 
         a = set(private).intersection(non_private)
-        print(a)
+        # print(a)
         precision = len(a)/len(private)
         recall = len(a)/len(non_private)
         if (precision+recall) != 0:
@@ -79,5 +79,5 @@ if __name__ == '__main__':
         compare('BMS1',eps)
         compare('BMS2',eps)
         compare('retail',eps)
-        # compare('BMS-POS',eps)
-        # compare('T10I4D100K',eps)
+        compare('BMS-POS',eps)
+        compare('T10I4D100K',eps)

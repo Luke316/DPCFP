@@ -22,7 +22,7 @@ class MIStree():
             
             if not next_node:
                 if epsilon!=0:
-                    next_node = MISTreeNode(item,np.random.laplace(0, scale = (1/n)/epsilon))
+                    next_node = MISTreeNode(item,np.random.laplace(0, 1/n/epsilon))
                 else:
                     next_node = MISTreeNode(item,0) #0328
                 next_node.parent = node
@@ -73,12 +73,14 @@ class MISTreeNode(TreeNodeBase,NodeMixin):
             self.children = children
         
     def SearchChildNode(self,item):
-        node_names =[]
+        # node_names =[]
         for node in self.children:
-            node_names.append([node.name])
-
-            if [item] in node_names:
-                return self.children[node_names.index([item])]
+            # node_names.append([node.name])
+            # print('item=',item,'node.name=',node.name)
+            if item == node.name:
+                return node
+            # if [item] in node_names:
+            #     return self.children[node_names.index([item])]
 
         return False
 
@@ -161,16 +163,21 @@ if __name__ == '__main__':
     print('Dataset = ' ,dataset)
     time_start1 = time()
     T, n = ReadDataset(dataset)
-    ep_1,ep_2,ep_3 = 0.05,0.02,0.03
+    ep_1,ep_2,ep_3 = 0.05,0.92,1.38  #0.02,0.03 #0.2,0.3 #0.38,0.57 #0.56,0.84 #0.74,1.11 #0.92,1.38
+    print(ep_1,ep_2,ep_3)
     #T10I4D100K retail kosarak BMS1 BMS2 BMS-POS
     truncatedT, items, truncated_length = TruncateDatabase(T,ep_1,n)
+    print("truncated_length=",truncated_length)
+
     sorted_MIS_table, support, LMS = MISTable(truncatedT,items,n,ep_2,truncated_length,0.01,0.25)
+    print("LMS=",LMS)
     final_sorted_transactions = SortTransactions(truncatedT,sorted_MIS_table)
     print('MIS Found and Transactions Sorted. Running time: {:.3f} seconds.'.format(time()-time_start1))
 
 
     time_start = time()
     master = MIStree()
+    # print(final_sorted_transactions)
     for transaction in final_sorted_transactions:
         master.AddTransaction(transaction,n,ep_3,truncated_length)
     time_used = time() - time_start

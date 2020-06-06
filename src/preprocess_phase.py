@@ -24,11 +24,11 @@ def MISTable(T, items,n,epsilon,truncated_length,threshold=0.01, beta=0.25): #be
     #     for key in support.keys():
     #         f.write("%s,%s\n"%(key,support[key]))
 
-    sensitivity = truncated_length/n
+    # sensitivity = truncated_length/n
     MIS_table = dict.fromkeys(items, 0)
     for item in support.keys():
         if epsilon!=0:
-            support[item] = support.get(item)/n + np.random.laplace(0, sensitivity / epsilon) # noisy support
+            support[item] = support.get(item)/n + np.random.laplace(0, truncated_length/n / epsilon) # noisy support
         else:
             support[item] = support.get(item)/n #0328
         MIS_table[item] = max(beta*support[item],threshold) #if beta =0, the MIS is basically threshold and equals to FIM
