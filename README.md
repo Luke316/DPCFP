@@ -1,5 +1,5 @@
-# DPCFP
-This is the code of the DPFPME
+# DPCFP-Growth++
+This is the code of the DPCFP-Growth++
 ## Requirements
 0. Python 3
 
