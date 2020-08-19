@@ -8,12 +8,12 @@
 \usepackage{xcolor}
 \usepackage[noend]{algpseudocode}
 \usepackage{algorithmicx,algorithm}
-% \usepackage{caption}
+% \usepackage{subcaption}
 \usepackage{forest}
 \ifCLASSOPTIONcompsoc
-\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf,position=top]{subfig}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf,position=top,subrefformat=parens,labelformat=parens]{subfig}
 \else
-\usepackage[caption=false,font=footnotesize]{subfig}\fi
+\usepackage[caption=false,font=footnotesize,subrefformat=parens,labelformat=parens]{subfig}\fi
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -52,15 +52,19 @@ sykuo@ntu.edu.tw}
 
 \maketitle
 
-\begin{abstract}%可以
-Frequent itemset mining is an extensively studied research domain of data mining. The aim is to find interesting correlations between items in a transaction database. 
-However, malicious user might gain sensitive information in the mining process. 
-Differential privacy is the de facto standard when it comes to protecting data. 
-Combining differential privacy with frequent itemset mining can provide strong privacy guarantee while generating statistical information from sensitive data.
-In existing studies, most algorithms are focusing on finding frequent patterns using one predefined threshold with the protect of differential privacy.
-However, using single threshold to extract itemsets creates ``rare item problem'', and setting respective support thresholds for each item is more adequate to reflect the nature of widely varied items.
-In this paper, we propose a novel FP-growth-like solution DPCFP++ to solve the rare item problem of frequent itemset mining while guarantee differential privacy at the same time.
-The experiments illustrate that our algorithm acheieves high utility in privately solving rare item problem.
+\begin{abstract}
+    Frequent itemset mining is an extensively studied research domain of data mining. The aim is to find interesting correlations between items in a transaction database. 
+    However, malicious user might gain sensitive information in the mining process. 
+    Differential privacy is the de facto standard when it comes to protecting data. 
+    Combining differential privacy with frequent itemset mining can provide strong privacy guarantee while generating statistical information from sensitive data. 
+    In existing studies, most algorithms are focusing on finding frequent patterns using one predefined threshold with the protect of differential privacy. 
+    However, using single threshold to extract itemsets creates ``rare item problem'', and setting respective support thresholds for each item is more adequate to reflect the nature of widely varied items. 
+    Also, the execution time of prior approaches are lengthy. 
+    In this paper, we propose a novel FP-growth-like algorithm DPCFP-growth++ to solve the rare item problem of frequent itemset mining while guarantee differential privacy at the same time. 
+    We first limit the sensitivity by truncating the transactions, and assign each item with its own threshold. 
+    Finally, we construct a differentially private MIS-tree and derive frequent itemsets from the tree. 
+    We add Laplace noise in each step, and prove our algorithm satisfies differential privacy.
+    The experiments on real-world and synthetic datasets illustrate that our algorithm achieves both high utility and efficiency. 
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -69,49 +73,108 @@ Differential Privacy, data mining, multiple minimum supports, frequent itemset m
 
 \section{Introduction}%最後一段還沒
 In modern era, the development of information technology grows rapidly, more and more services aggregate data from individuals. 
-With the evolution of machine learning and statistics, organizations utilize these enormous amount of data to improve the accuracy of their model, understand the past and predict the future.
-Frequent itemset mining is a popular research topic in data mining, and it was first introduced in 1993 by Agrawal et al.\cite{b1} 
+With the evolution of machine learning and statistics, organizations utilize these crowdsourced data to improve the accuracy of their model, understand the past and predict the future.
+Frequent itemset mining is a popular research topic in data mining, and it was first introduced in 1993 \cite{b1} 
 The original purpose of frequent itemset mining was to analyze customer habits in a supermarket. 
 They tried to find associations between different items that customers frequently bought together. 
 According to the mined results, the management team of the supermarket can make business decisions to maximize profit including product rearrangement, bundle selling, etc.
 After decades of research, frequent itemset mining can also be extended to many other area besides market basket analysis. For example, text mining, disease diagnosis, and so on.
 
 Majority of existing literatures endeavors on single threshold mining, that is, treat all the items equally and apply a single threshold to decide whether an itemset is frequent or not.
-However, setting one appropriate threshold for all items is a hard question. 
+However, setting a single threshold for all items is also a drawback. 
 For example, consider two items: soda and television in a wholesale store. Soda is frequently bought while television is an uncommon purchase. 
 If the threshold is set too high, we might consider TV as a less important item, but TV contributes thousand times more to the store revenue than the common purchased soda. 
 On the other hand, if the threshold is too low, the computational cost becomes expensive, the mining result will cause combinational explosion and we will receive many meaningless itemsets. 
 The above dilemma is the famous ``rare item problem''. In real life applications, some items tend to have more weights in natural than other items. 
-Researchers \cite{b2}\cite{b3}\cite{b4}\cite{b5} have worked on this problem by allowing users to use ``multiple minimum supports''. 
-Briefly speaking, rare itemset mining is a more advanced setting of frequent itemset mining, and it allows user to apply different threshold on each item .
+Researchers \cite{b2}\cite{b3}\cite{b4}\cite{b5} have worked on this problem by allowing users to use ``multiple minimum supports'', that is, users can apply different threshold on each item.
+Briefly speaking, rare itemset mining is a more advanced setting of frequent itemset mining. 
 
-The convenience which data mining brings comes with the price of privacy leakage. The more precise the model is, the more personal behavioral information reveals. 
+The convenience which data mining brings comes with the price of privacy leakage. 
+Participants often consider organizations as untrusted entities.
+The more precise an organization's model is, the more personal behavioral information reveals. 
 How to de-identification is a mainstream topic in related research.
-A straightforward approach is to .......
+An intuitive approach is to remove participant identifying information such as ID numbers, last names.
+However, with little background knowledge, adversary can easily distinguish data contributors.
+Reference \cite{b13} uncovered sensitive information of users from Netflix Prize dataset by using another movie database, IMDB, as background knowledge.
 
 Differential Privacy, first proposed by Dwork in\cite{b4}, had come to rescue in 2006. 
-Since then, many research based on differential privacy have been conducted. Tech giants such as FAANG(facebook, applem, amazon, netflix, google) have added features to their products with different kinds of differential privacy model.
-% Differential privacy is the {\it{de facto}} standard for protecting privacy. 
-It guarantees that the outputs of a mechanism will be approximately the same when two input is almost identical, and thus protect privacy from explosure. 
+Since then, many research based on differential privacy have been conducted. 
+Tech giants such as FAANG(Facebook, Apple, Amazon, Netflix, Google) have added features to their products with different kinds of differential privacy model. 
+Differential privacy hides individual information by injecting carefully calibrated noise into data. 
+It guarantees that the outputs of a mechanism will be approximately the same when two inputs are almost identical, 
+so any adversary cannot explicitly tell from the output that an individual is part of the data or not, and thus protect privacy from explosure. 
+However, too much noise will cause the output to lose utility. On the other hand, too little noise will lead to privacy leakage.
+Striking a balance between these two is a challenging problem. 
+The additional execution time when combining differential privacy with frequent itemset mining is a big challenge as well.
 
-It guarantees that a user.........
-In this paper, we study the problem of how to perform frequent itemset mining (FIM) on transaction databases while satisfying differential privacy.
+%Main challenge
+% We deal with the rare item problem of frequent itemset mining (FIM) while satisfying differential privacy in this paper.
+% The main challenges are 
+% \begin{enumerate}
+%     \item 
+%     \item high execution time 
+% \end{enumerate}
+%Main contribution % 
+In this paper, we propose a novel approach DPCFP-growth++ that deals with the rare item problem of frequent itemset mining while satisfying differential privacy. 
+To the best of our knowledge, our work is the first algorithm that focus on this problem.
+The goal is to achieve both high utility and time efficiency.
+Our technique merges the advantage of \cite{b4}\cite{b6}\cite{b8}. 
+DPCFP-growth++ is a three-stage algorithm, and each stage consumes different degree of privacy budget.
+We use the length constraint strategy to limit the high sensitivity of databases.
+In addition, we build a noisy FP-tree-like data structure to accelerate the process of finding frequent itemsets. 
+In general, our contributions can be summarized as follows:
+\begin{itemize}
+    \item We propose DPCFP-growth++, a differential private frequent itemset mining algorithm with multiple minimum supports. 
+    The algorithm keeps a good tradeoff between utility and privacy.
+    \item We lower the sensitivity by limiting the length of transactions, and differential privately assign support thresholds to each item. 
+    \item We modified MIS-tree structure to meet the requirements of differential privacy, store database information and mine frequent itemsets, 
+    \item  The overall process of our algorithm only requires as small as three scans of database.
+    The experimental results on real-life and synthetic datasets show that our algorithm outperforms than state-of-art algorithm.
+\end{itemize}
+
+The rest of the paper is organized as follows.
+In Section \ref{sec2}, we briefly introduce related works. 
+Section \ref{sec3} describes the background knowledge about differential privacy and frequent itemset mining and provides problem statement.
+Section \ref{sec4} introduces the proposed algorithm DPCFP-growth++ in detail. Proofs and examples can also be found in this section.
+Section \ref{sec5} evaluates our algorithm on benchmark datasets. 
+Finally, we place conclusions and future works in Section \ref{sec6}.
 
 
-\section{Related Work}
+\section{Related Work}\label{sec2}
 \subsection{Frequent Itemset Mining}
 There are mainly two types of frequent itemset mining algorithms. 
-One is Apriori, and the other is FP-growth. %%APriori and FP!!
+One is Apriori\cite{b16}, and the other is FP-growth\cite{b17}. 
+Apriori finds frequent itemset in breadth-first search manner. 
+It utilizes the Apriori property to reduce search space. 
+More specifically, an itemset is a candidate if all of its subsets are frequent. 
+Apriori scans database and identifies the frequent i-itemset, and use them to generate candidate (i+1)-itemsets. 
+After that, it scans database again and verifies these candidates are frequent or not, and generates candidate (i+2)-itemsets. 
+The process is iteratively executed until no candidate itemset can be generated. 
+On the other hand, FP-growth only needs two database scan. 
+In the first pass, it counts the support of each item and stores items in a header table in decreasing support order. 
+Also, a prefix-tree structure, FP-tree, is constructed in this phase. 
+Next, it injects transactions into FP-tree in second pass. 
+The FP-growth algorithm recursively builds conditional pattern base and conditional FP-tree for each frequent item from the FP-tree and then uses them to discover all frequent itemsets. 
+Due to the time-consuming exhaustive database scans of Apriori, Fp-growth is much faster than Apriori.
+
 \subsection{Frequent Itemset Mining with Multiple Minimum Supports}
+Liu, Hsu and Ma \cite{b2} first pointed out the drawbacks of single support threshold, and developed an apriori-based algorithm MSApriori to solve this problem. 
+Hu and Chen \cite{b18} proposed a FP-growth-like algorithm CFP-growth to accelerate the mining process. 
+Uday Kiran and Krishna Reddy \cite{b4} adapted it to CFP-growth++ and proposed four pruning techniques, further improved the mining efficiency. 
+Reference \cite{b5} used a FP-ME-tree to vertically mine frequent itemsets with multiple minimum supports. 
 
 \subsection{Differentially Private Frequent Itemset Mining}
-
-Frequent itemset mining, also known as frequent pattern mining, is 
-The NoisyCut algorithm in \cite{b8} was proven violating differential privacy in %%cite!
-
+Reference \cite{b19} applied differential privacy on top-k most frequent itemset mining. 
+Reference \cite{b7} proposed the PrivBasis algorithm which projects database onto lower dimensions, and compute maximal cliques in graph to find top-k most frequent itemsets. 
+Zeng, Naughton and Cai\cite{b6} proposed SmartTruncating to lower the sensitivity by limiting the cardinality of transactions. 
+Reference \cite{b20} argued that transaction should be splitted instead of being truncated. 
+The NoisyCut algorithm in \cite{b8} is a new differential privacy mechanism, but was later proven violating differential privacy in \cite{b10} \cite{b11}. 
+Despite this, \cite{b8} successfully adapted FP-tree in their literature. 
+Wang et al.\cite{b21} invented a new differential privacy mechanism called sequence exponential mechanism(SEM). 
+However, all the above algorithms do not consider multiple support thresholds, and either only find top-k frequent itemsets or face running time issue.
 
 %第三段囉
-\section{Preliminaries and Problem Statement}
+\section{Preliminaries and Problem Statement}\label{sec3}
 In this section, we introduce and provide formal definitions of differential privacy and the rare item problem of frequent itemset mining. 
 Finally, we give the problem statement in the last subsection.
 
@@ -129,7 +192,7 @@ Pr[\mathcal{M(D)}\in S] \leq e^\varepsilon \cdot Pr[\mathcal{M(D')}\in S]
 The parameter $\varepsilon$ is called privacy budget, it quantifies the degree of privacy.
 The larger the $\varepsilon$, the less private the result is. If the $\varepsilon$=0, the result is perfectly private. 
 
-There are a few mechanisms that acheieves differential privacy.
+There are few mechanisms that achieves differential privacy.
 Laplace mechanism is one of the most popular method. 
 It injects properly calibrated noise into the original output according to the sensitivity.
 We give the definition of sensitivity as follows.
@@ -159,7 +222,7 @@ If each procedure $\mathcal{M}_i$ satisfies $\varepsilon_i$-differential privacy
 
 \begin{lemma}{(Closure Under Post-Processing):}\\\label{lm2}
     For any algorithm $\mathcal{A}$ and a $\varepsilon$-differentially private mechanism $\mathcal{M}$,
-    the computaion $\mathcal{A}\circ\mathcal{M}(D)$ satisfies $\varepsilon$-differential privacy as long as $A$ do not access database directly.
+    the computation $\mathcal{A}\circ\mathcal{M}(D)$ satisfies $\varepsilon$-differential privacy as long as $A$ do not access database directly.
     
 \end{lemma}
 
@@ -172,14 +235,14 @@ Frequent itemset mining, also known as frequent pattern mining, refers to discov
 Any subset of the item universe I is called an itemset.
 \end{definition}
 An itemset which contains k distinct items is called k-itemset. k is also called the length of the itemset or the cardinality of the itemset. 
-We will use them in this work interchangebly.
+We will use them in this work interchangeably.
 
 
-\begin{definition}{(Support and Threshold):}\\
+\begin{definition}{(Support and Threshold):}\label{defthreshold}\\
 The number of transactions in the database containing an itemset is known as the support of that itemset.
-\end{definition}
-We denote support and threshold as $S$ and $\lambda$, respectively.
-There are two ways to specify $\S$ and $\lambda$. One is the percentage way, and the other is by absolute number.
+\end{definition}\label{threshold}
+We denote support and threshold as $sup$ and $\lambda$, respectively.
+There are two ways to specify $sup$ and $\lambda$. One is the percentage way, and the other is by absolute number.
 It is simple to convert between them, just multiply or divide the number of total transactions $n$.
 % For consistency, we choose the former one in this paper.
 
@@ -188,9 +251,13 @@ An itemset $X$ is frequent if and only if its support $sup(X)$ is greater than o
 \end{definition}
 This means that the presence of itemset $X$ in the database is statistically significant.
 
+\begin{example}\label{ex1}
+    Consider the database shown in Table \ref{db}. There are $n=20$ transactions in the database, and item universe $I=\{a,b,c,d,e,f,g,h\}$.
+    The itemset (a,b) is a 2-itemset. It occurs in the database 6 times, so the $sup$(a,b) is 6. 
+    Let's say the user-specified threshold is 2 and we can see (a,b) is a frequent itemset while (a,g) is not, for $sup$(a,g) = 1.
+\end{example}
 
-
-\begin{table}[htbp]
+\begin{table}[!tb]
     \caption{A Transaction Database}\label{db}
     \centering
     \begin{tabular}{|l|l|}
@@ -210,7 +277,7 @@ This means that the presence of itemset $X$ in the database is statistically sig
     \begin{tabular}{|l|l|}
     \hline
     TID & \multicolumn{1}{c|}{Items} \\ \hline
-    11  & a,e,d          \\ \hline
+    11  & a,d,e          \\ \hline
     12  & b,e        \\ \hline
     13  & a,b         \\ \hline
     14  & a,b,f        \\ \hline
@@ -223,32 +290,29 @@ This means that the presence of itemset $X$ in the database is statistically sig
     \end{tabular}
 \end{table}
 
-\begin{example}\label{ex1}
-Consider the database shown in Table \ref{db}. There are $n=20$ transactions in the database, and item universe $I=\{a,b,c,d,e,f,g,h\}$.
-The itemset (a,b) is a 2-itemset. It occurs in the database 6 times, so the $S$(a,b) is 6. 
-Let's say the user-specified threshold is 2 and we can see (a,b) is a frequent itemset while (a,g) is not, for $S$(a,g) = 1.
-\end{example}
+
 
 \subsection{Rare Item Problem}
 By the nature of items, some items appear more frequently than others. However, this sometimes causes meaningless itemsets.
 We have to find frequent itemsets without generating too many meaningless itemsets.
-To deal with rare item problem, Liu et al.\cite{b2} first tackled the problem with minimum item supports (MIS).
+To deal with rare item problem, \cite{b2} first tackled the problem with minimum item supports (MIS).
 MIS allows user to specify respective threshold for every item. 
-\begin{definition}{(Minimum Item Support)}\\
+\begin{definition}{(Minimum Item Support):}\\
 Minimum Item Support refers to each item's respective user-defined threshold.
 \end{definition}
 MIS can not only be set by user one by one, but also can be set adaptively.
-Liu et al. also proposed a equation for fast-setting MIS by items' supports.
+Reference \cite{b2} also proposed a equation for fast-setting MIS by items' supports.
 For an item $i_j$ with support $sup(j)$, the Minimum Item Support(MIS) of $j$ is
 \begin{equation} 
 MIS(i_j)=max\{\beta*sup(i_j),\lambda\},\label{eq}
 \end{equation}
 where $\beta\in[0,1]$.
 $\beta$ is a relevance parameter that controls how the MIS values for items should be related to their frequencies.
-Noted that when $\beta$=0, the MIS value equals $\lambda$, which is the same as the traditional setting of frequent itemset mining.
+Noted that when $\beta$=0, the MIS value equals to $\lambda$, 
+which is the same as the traditional setting of frequent itemset mining.
 
 
-\begin{definition}{(MIS of an Itemset)}\\
+\begin{definition}{(MIS of an Itemset):}\\
 The minimum item support of a k-itemset $X=\{i_1,i_2,i_3,\dots,i_k\}$ is the smallest MIS value of items in $X$, i.e. \\
 \begin{equation} 
 MIS(X)=min\{MIS(i_j)|i_j\in X\}.\label{eq2}
@@ -257,8 +321,8 @@ MIS(X)=min\{MIS(i_j)|i_j\in X\}.\label{eq2}
 
 \begin{example}\label{ex2}
 Consider the database in Table \ref{db}. 
-If we set MIS(b)=15 and MIS(f)=3, then itemset (b) is not frequent since $S$(b) = 13. 
-However, itemset (bf) is a frequent itemset since its support is 3 which is equal to MIS(bf) = min\{MIS(b),MIS(f)\} = 3.
+If we set MIS(b)=15 and MIS(f)=3, then itemset (b) is not frequent since $sup$(b) = 13. 
+However, itemset (b,f) is a frequent itemset since its support is 4 which is larger than MIS(b,f) = min\{MIS(b),MIS(f)\} = 3.
 \end{example}
 Example \ref{ex2} shows that frequent itemset mining using multiple minimum supports is different from single threshold.
 Under single threshold condition, if an itemset is not frequent, its superset is not frequent either.
@@ -268,7 +332,6 @@ However, Apriori property cannot be directly applied to our problem.
 
 \subsection{Problem Statement}
 Based on above definitions, we give the formal statement of our problem. 
-Our algorithm works in a centralized model. As illustrate in Figure. %%figure
 Given a transaction database, a threshold and a privacy budget, we want to find all frequent itemsets whose support is no less than the threshold using multiple minimum supports in a differentially private way.
 \subsection{Main Challenges}
 We oberserve there are two major challenges in using multiple minimum supports to mine frequent itemsets under differential privacy.
@@ -292,11 +355,11 @@ We oberserve there are two major challenges in using multiple minimum supports t
 \end{enumerate} 
 
 
-\section{Proposed Method}
+\section{Proposed Method}\label{sec4}
 \subsection{Overview}
-We now describe the framework of our proposed algorithm, which is called DPCFP, in the following paragraph. 
+We now describe the framework of our proposed algorithm, which is called DPCFP-growth++, in the following paragraph. 
 Motivated by the success in \cite{b4}\cite{b6}\cite{b8}, we combine their advantage together in this paper. 
-DPCFP consists of three stages, namely {\it{TruncateDatabase}, \it{MISAssigning}, \it{CFP-Growth}.} 
+DPCFP-growth++ consists of three stages, namely {\it{Truncate Database}, \it{MIS-Assigning}, \it{MIS-tree}.} 
 The basic idea is to differential privately get each item's support and MIS. 
 Next, we sort the items according to the descending order of MIS and put them into MIS header table. 
 Afterwards, we add transactions into MIS-tree by the same order one after another. 
@@ -308,9 +371,9 @@ $\varepsilon_1$, $\varepsilon_2$,and $\varepsilon_3$ follows the sequential comp
 % Reference \cite{b6} is the first literature that tackle the high sensitivity problem by constrain the maximal number of items in transactions.
 In this part, we truncate database to limit sensitivity to a acceptable level as \cite{b6} proposed.
 The rationale behind truncating is that most transactions in a database is short in general case.
-If there exist a few long transactions, then sensitivity will be affected remarkably.
+If there exist few long transactions, then sensitivity will be affected remarkably.
 These few long transactions which have major impact on sensitivity but less importance on frequent itemsets is infuriating.
-To avoid this problem, we pose a limit to the length of transasctions. 
+To avoid this problem, we pose a limit to the length of transactions. 
 Of course, get rid of some items in transactions will create degrees of information loss.
 \begin{algorithm}[htbp]
     \caption{TruncateDatabase} 
@@ -323,10 +386,11 @@ Of course, get rid of some items in transactions will create degrees of informat
     \State $D'\leftarrow \emptyset$
     \State Read $D$ to get total items $m$ and the total number of transactions $n$
     \State $z$ = {EstimateDistribution}{($D$, $\varepsilon_1$, $n$, $m$)}
-    \State Let $l$ be the smallest integer such that  $\sum_{i=1}^l$$z_i$ $\ge$ 0.95
+    \State Let $\ell$ be the smallest integer such that  $\sum_{i=1}^l$$z_i$ $\ge$ 0.95
     \For{each transaction $t$ in $D$}
-        \State add $t'$ = RandomTruncate($t$, $l$) to $D'$
+        \State add $t'$ = RandomTruncate($t$, $\ell$) to $D'$
     \EndFor 
+    \State {\bf end for}
     \State \Return $D'$
     
     \Function{EstimateDistribution}{$D$,$\varepsilon$,$n$,$m$} 
@@ -336,8 +400,8 @@ Of course, get rid of some items in transactions will create degrees of informat
     \State \Return $\frac{z'}{n}$
     \EndFunction
 
-    \Function{RandomTruncate}{$t$,$l$}
-    \State $t'$ = Random Sample min({$|t|$,$l$}) item from t
+    \Function{RandomTruncate}{$t$,$\ell$}
+    \State $t'$ = Random Sample min({$|t|$,$\ell$}) item from t
     \State \Return $t'$
     \EndFunction 
     \end{algorithmic}
@@ -348,10 +412,10 @@ Of course, get rid of some items in transactions will create degrees of informat
 In Algorithm \ref{alg1}, function {\it{EstimateDistribution}} estimates the noisy distribution of the database.
 The elements of vector $z$ are the number of 1-itemsets, 2-itemsets, $\ldots$, respectively.
 Calculating the distribution of the database has privacy leakage concern, so we use Laplace mechanism to perturb the result after $z$ is calculated.
-In line 4, $l$ is the maximal length parameter that controls the tradeoff between information loss and sensitivity reduction.
-0.95 is just a experimental value that produces best results for our testing dataset.
+In line 4, $\ell$ is the maximal length parameter that controls the tradeoff between information loss and sensitivity reduction.
+0.95 is just an experimental value that produces best results for our testing dataset.
 as the way which \cite{b6} proposed.
-Afterwards, function {\it{RandomTruncate}} randomly select $l$ items from the transactions that are longer than $l$ and keep the rest transactions the same.
+Afterwards, function {\it{RandomTruncate}} randomly select $\ell$ items from the transactions that are longer than $\ell$ and keep the rest transactions the same.
 Finally, we put these new transactions into a new database $D'$.
 % proof
 \begin{theorem}
@@ -363,7 +427,14 @@ It is already proved in \cite{b6} that any $\varepsilon$-differential private al
 Since adding or removing one transaction can only affect $z$ in one element by one, the sensitivity is 1.
 Deploying Laplace noise $(\frac{1}{\varepsilon_1})$ to each element of $z$ satisfies satisfies $\varepsilon_1$-differential privacy.
 \end{IEEEproof}
-\begin{table}[htbp]
+
+\begin{example}
+    Let's continue the example in Table \ref{db}. 
+    Say we set the maximal length constraint $\ell=3$, so TID 7 and 16 will be truncated.
+    We show the truncated database in Table \ref{db2}.
+\end{example} 
+
+\begin{table}[tb]
     \caption{Truncated Database}
     \centering    
     \begin{tabular}{|l|l|}
@@ -397,11 +468,7 @@ Deploying Laplace noise $(\frac{1}{\varepsilon_1})$ to each element of $z$ satis
     \label{db2}
 \end{table}
 
-\begin{example}
-    Let's continue the example in Table \ref{db}. 
-    Say we set the maximal length constraint $l=3$, so TID 7 and 16 will be truncated.
-    We show the truncated database in Table \ref{db2}.
-\end{example} 
+
 
 
 \subsection{MIS-Assigning}
@@ -410,7 +477,7 @@ With the tranformed database, we can now count the noisy support and use it to f
 \begin{algorithm}[htbp]
     \caption{NoisySupportandMISTable}
     \hspace*{0.02in} {\bf Input:} %算法的输入
-    database $D'$; privacy budget $\varepsilon_2$; truncated length $l$; relevance parameter $\beta$; threshold $\lambda$\\
+    database $D'$; privacy budget $\varepsilon_2$; truncated length $\ell$; relevance parameter $\beta$; threshold $\lambda$\\
     \hspace*{0.02in} {\bf Output:} %算法的结果输出
     noisy supports $S$; MISTable $M$
 
@@ -426,7 +493,7 @@ With the tranformed database, we can now count the noisy support and use it to f
 
         \For {each $i$ in item universe $I$}
         \State Count i's support $i.sup$
-        \State Add $i.\hat{sup}$ = $i.sup + Lap(\frac{l}{\varepsilon_2})$ to $S$
+        \State Add $i.\hat{sup}$ = $i.sup + Lap(\frac{\ell}{\varepsilon_2})$ to $S$
         \State Add $i.MIS$ = $max\{ \beta * i.\hat{sup}, \lambda\} $ to $M$
         \EndFor
         \State {\bf end for}
@@ -445,13 +512,22 @@ Line 4 and 5 compute and store the noisy supports and MIS table.
 \end{theorem}
 \begin{IEEEproof}
 It straightforward to see the only part that accesses the database in Algorithm \ref{alg2} is in line 3.
-Since we already set transaction length constraint to $l$, any addition or deletion of a transaction can at most increase or decrease the items' support by $l$.
-In this way, appling Laplace noise $(\frac{l}{\varepsilon_2})$is enough to garantee $\varepsilon_2$-differential privacy.
+Since we already set transaction length constraint to $\ell$, any addition or deletion of a transaction can at most increase or decrease the items' support by $\ell$.
+In this way, appling Laplace noise $(\frac{\ell}{\varepsilon_2})$is enough to garantee $\varepsilon_2$-differential privacy.
 The rest of algorithm only performs post-processing.
 \end{IEEEproof}
 
-\begin{table}[htbp]
-    \caption{Support and MIS Table}
+\begin{example}  
+    Continue the previous example in Table \ref{db2}, we ommit the Laplace noise part for give a better understanding of the algorithm.
+    We use \eqref{eq} to compute MIS by setting $\beta=0.5$, threshold = 2 and round the results to integer.
+    The supports and the approximate MIS are shown in Table \ref{MIS}.
+    % Equation \eqref{eq} will set higher threshold for items that occurs more frequently and thus reduce some meaningless itemsets.
+    We can find \eqref{eq} adaptively set larger threshold for items that occur more frequently.
+\end{example}
+
+
+\begin{table}[tb]
+    \caption{Support and MISTable}
     \centering
     \begin{tabular}{|c|c|c|}
     \hline
@@ -468,13 +544,6 @@ The rest of algorithm only performs post-processing.
     \label{MIS}
 \end{table}
 
-\begin{example}  
-    Continue the previous example in Table \ref{db2}, we ommit the Laplace noise part for give a better understanding of the algorithm.
-    We use \eqref{eq} to compute MIS by setting $\beta=0.5$, threshold = 2 and round the results to integer.
-    The supports and the approximate MIS are shown in Table \ref{MIS}.
-    % Equation \eqref{eq} will set higher threshold for items that occurs more frequently and thus reduce some meaningless itemsets.
-    We can find \eqref{eq} adaptively set larger threshold for items that occur more frequently.
-\end{example}
 
 \subsection{MIS-tree}
 Next, we introduce the concept of MIS-tree and least minimum support(LMS). 
@@ -487,7 +556,7 @@ A MIS-tree structure consists of two parts. The tree itself and a header table.
     The header table contains all items in descending order of MIS.
     \item Each node $N$ in the tree consists of two fields: $N$.name, $N$.count, where $N$.name indicates which item this node represents and $N$.count indicates the number of transactions reaching this node.
     \item Each entry in the header table consists of four fields: item's name, item's support, item's MIS, and 
-    item's node list which points to each node with the same item name as the entry in the prefix tree.
+    item's node list which contains each node with the same item name as the entry in the prefix tree.
 \end{enumerate}
 
 
@@ -540,45 +609,56 @@ Since items with support less than LMS cannot be frequent as well as their super
 LMS is of crucial significance in our algorithm as this constraint efficiently saves both time and memory when constructing MIS-tree.
 Algorithm \ref{alg3} does not access database and only performs post-processing. Therefore, algorithm \ref{alg3} does not affect privacy.
 
+\begin{example}
+    Let us continue with the example in Table \ref{MIS}.
+    Items are stored in descending MIS manner in the header table as entries. 
+    Because item g and h are not frequent, we can discard these two items in the header table, as shown in Fig. \subref*{header}. 
+    The smallest MIS in frequent 1-itemsets is 3, so LMS = 3 instead of original threshold 2. 
+\end{example}
+
 \begin{algorithm}[htbp]
-    \caption{MIS-Tree}
+    \caption{DPCFP-growth++}
     \hspace*{0.02in} {\bf Input:} %算法的输入
     database $D'$; noisy supports $S$; MISTable $M$; privacy budget $\varepsilon_3$\\
     \hspace*{0.02in} {\bf Output:} %算法的结果输出
-    MIS-tree $T$
+    Frequent itemsets $F$
     
     \begin{algorithmic}[1]
         \State $\hat{M} =$ FindLMS($S,M$)
         \State create $root\leftarrow\emptyset$ for MIS-tree $T$
-        \For{each transactions $t'$ in $D'$}
+        \For{each transaction $t'$ in $D'$}
         \State Sort $t'$ in $\hat{M}$ order, neglect items that are not in $\hat{M}$
         \State AddTransaction($root,t',\varepsilon_3$)
         \EndFor
         \State {\bf end for}
-        \State UpdateTree($root$) 
-    \State CFPGrowth($T$,)
-    \State \Return MIS-tree $T$
+        \State $T\leftarrow$UpdateTree($root$) 
+        \State $F\leftarrow$CFP-Growth($T$,[])
+    \State \Return Frequent itemsets $F$
 
     \Function{AddTransaction}{$root,t',\varepsilon_3$}
     \State $Node \leftarrow root$
     \For{each items $i_j$ in $t'$}
-    \State Check if $i_j$ is in $Node$'s child
+    \State Check if $i_j$ is $Node$'s child
     \If{false}
         \State Create $NewNode$ $i_j$ under $Node$, 
-        \State Initialize $i_j$ with Laplace noise $Lap(\frac{1}{\varepsilon_3})$
-        \State $Node=NewNode$
+        \State initialize $i_j$ with Laplace noise $Lap(\frac{1}{\varepsilon_3})$
+        \State $Node\leftarrow NewNode$
+        \State Update the node list in header table  
     \Else
-        \State $Node=i_j$
+        \State $Node\leftarrow i_j$
     \EndIf
     \EndFor
+    \State {\bf end for}
     \State $Node.sup$ ++
     \EndFunction 
 
-    \Function{UpdateTree}{$node$}
+    \Function{UpdateTree}{$T,node$}
     \For{each child in $node$'s children}
-        \State UpdateTree(child)
+        \State UpdateTree($T$,child)
         \State node.count += child.count
     \EndFor
+    \State {\bf end for}
+    \State \Return T
     \EndFunction
     \end{algorithmic} 
     \label{alg4}
@@ -588,10 +668,11 @@ As shown in Algorithm \ref{alg4}, We first find LMS, and discard the items that 
 Next, we scan the database and sort each transaction in the descending MIS order. 
 After that, we insert the sorted transactions into the MIS-tree in line 5. 
 % Reference \cite{b8} was the first paper that adopt FP-growth algorithm in differential private frequent itemsets mining.
-Motivated by the success of \cite{b8}, we exploit similar approach as they did to obfuscate the support count of each node.
-In this step, only the count of the last node in the path is increased by one instead of every node in line 19.
-To get accurate support count, a depth-first search function is applied to propagate count from leaf nodes to root node in line 7.
-Finally, the MIS-tree is constructed and we use CFP-growth algorithm to find frequent itemsets.
+Motivated by the success of \cite{b8}, we exploit similar approach as they did to obfuscate the support count of each node. 
+In this step, only the count of the last node in the path is increased by one instead of every node in line 19. 
+To get accurate support count, a depth-first search function is applied to propagate count from leaf nodes to root node in line 7. 
+Finally, the MIS-tree is constructed and we use CFP-growth++ algorithm to find frequent itemsets. 
+The original CFP-growth++ is shown in Algorithm \ref{alg5} for reader's information.
 
 \begin{theorem}
 Algorithm \ref{alg4} satisfies $\varepsilon_3$-differential privacy
@@ -608,8 +689,26 @@ Initialize each node with Laplace noise $(\frac{1}{\varepsilon_3})$ satisfies $\
 The rest of the algorithm performs post-processing, and does not influence privacy.
 \end{IEEEproof}
 
+\begin{example}
+    Here we show the construction process of MIS-tree. 
+    Consider the truncated transaction database in Table \ref{db2} and MIS table in Table \ref{MIS}. 
+    Fig. \ref{construction} gives an example of building a noisy MIS-tree. 
+    Again, we ommit the Laplace noise in the figure to give a better explaination of the mechanism.
+    Fig. \subref*{ba} shows the MIS-tree after adding the first transaction. 
+    The first transaction is \{a,b\}, we sort it by descending MIS order, and it thus becomes \{b,a\}.
+    This creates two new nodes $\langle$b,0$\rangle$ under root and $\langle$a,0$\rangle$ under $\langle$b,0$\rangle$. 
+    We only increase the support count of the last node in the path by one to meet the Laplace mechanism requirements. 
+    So the $\langle$a,0$\rangle$ becomes $\langle$a,1$\rangle$. 
+    Notice that the Laplace noise which we ommited should have been injected when initialing each node. 
+    The MIS-tree after scanning the second transaction is as Fig. \subref*{bae} shows. 
+    After scanned all the transactions, we have the MIS-tree as Fig. \subref*{beforepropagation}. 
+    Finally, the support count of each node is added to its parent from leaf nodes toward the root node. 
+    The ultimate MIS-tree is shown in Fig. \subref*{afterpropagation}.
+\end{example}
+
+
 % \newsavebox{\tempbox}
-\begin{figure}[t]
+\begin{figure}[tb]
     \centering
     \subfloat[]{
         \begin{tabular}[b]{|c|c|c|}
@@ -621,8 +720,8 @@ The rest of the algorithm performs post-processing, and does not influence priva
         c    & 6       & 3   \\ \hline
         d    & 5       & 3   \\ \hline
         f    & 5       & 3   \\ \hline
-        \end{tabular}}
-        \label{header}
+        \end{tabular}\label{header}}
+    \qquad
     \subfloat[]{
         \begin{forest}
             [${Null}$,circle,draw
@@ -630,8 +729,8 @@ The rest of the algorithm performs post-processing, and does not influence priva
                     [{a,1},circle,draw]
                 ]
             ]
-        \end{forest}}
-    \\
+        \end{forest}\label{ba}}
+    \qquad
     \subfloat[]{
         \begin{forest}
             [${Null}$,circle,draw
@@ -641,46 +740,77 @@ The rest of the algorithm performs post-processing, and does not influence priva
                     ]
                 ]
             ]
-        \end{forest}}
-        \subfloat[]{
-            \begin{forest}
-                [${Null}$,circle,draw
-                    [{b,0},circle,draw
-                        [{a,1},circle,draw
-                            [{e,1},circle,draw]
-                            [{f,1},circle,draw]
-                        ]
-                    ]
-                ]
-            \end{forest}}
-            \\
-        \subfloat[]{
-            \begin{forest}
-                [${Null}$,circle,draw
-                    [{b,0},circle,draw
-                        [{a,2},circle,draw
-                            [{e,2},circle,draw]
-                            [{f,2},circle,draw]
-                        ]
-                        [{e,1},circle,draw
-                            [{f,2},circle,draw]
-                        ]
-                        [{c,2},circle,draw
-                            [{d,1},circle,draw]
-                        ]
-                        [{f,1},circle,draw]
-                    ]
-                    [{e,1},circle,draw]
-                    [{c,0},circle,draw
-                        [{d,3},circle,draw]
-                    ]
-                    [{a,0},circle,draw
+        \end{forest}\label{bae}}
+    \\
+    \subfloat[]{
+        \begin{forest}
+            [${Null}$,circle,draw
+                [{b,0},circle,draw
+                    [{a,2},circle,draw
                         [{e,2},circle,draw]
-                            [{d,1},circle,draw]
+                        [{f,2},circle,draw]
+                    ]
+                    [{e,1},circle,draw
+                        [{f,2},circle,draw]
+                    ]
+                    [{c,2},circle,draw
+                        [{d,1},circle,draw]
+                    ]
+                    [{f,1},circle,draw]
+                ]
+                [{e,1},circle,draw]
+                [{c,0},circle,draw
+                    [{d,3},circle,draw]
+                ]
+                [{a,0},circle,draw
+                    [{e,2},circle,draw
+                        [{d,1},circle,draw]
                     ]
                 ]
-            \end{forest}}
-    
+            ]
+        \end{forest}\label{beforepropagation}}
+
+
+        % \qquad
+        % \subfloat[]{
+        %     \begin{forest}
+        %         [${Null}$,circle,draw
+        %             [{b,0},circle,draw
+        %                 [{a,1},circle,draw
+        %                     [{e,1},circle,draw]
+        %                     [{f,1},circle,draw]
+        %                 ]
+        %             ]
+        %         ]
+        %     \end{forest}\label{baf}}
+        %     \qquad
+    \subfloat[]{
+        \begin{forest}
+            [${Null}$,circle,draw
+                [{b,13},circle,draw
+                    [{a,6},circle,draw
+                        [{e,2},circle,draw]
+                        [{f,2},circle,draw]
+                    ]
+                    [{e,3},circle,draw
+                        [{f,2},circle,draw]
+                    ]
+                    [{c,3},circle,draw
+                        [{d,1},circle,draw]
+                    ]
+                    [{f,1},circle,draw]
+                ]
+                [{e,1},circle,draw]
+                [{c,3},circle,draw
+                    [{d,3},circle,draw]
+                ]
+                [{a,3},circle,draw
+                    [{e,3},circle,draw
+                        [{d,1},circle,draw]
+                    ]
+                ]
+            ]
+        \end{forest}\label{afterpropagation}}
 %     \savebox{\tempbox}{
 %         \begin{forest}
 %         [${Null}$,circle,draw,
@@ -722,95 +852,186 @@ The rest of the algorithm performs post-processing, and does not influence priva
 %           ]
 %         ]
 %     \end{forest}}%
-    \label{A MIS-Tree}
-\caption{Construction of a MIS-tree}
+\caption{Construction of a MIS-tree. (a) Header table (b) After scanning the first transaction (c)After scanning the second transaction (d) After scanning the whole database (e) After support count propagation}
+\label{construction}
 \end{figure}
 
-\begin{example}
-Let us continue with the example in Table \ref{MIS}.
-Items are stored in the header table in descending MIS manner. 
-Because item g and h are not frequent, we can discard these two items in the header table. 
-The smallest MIS in frequent 1-itemsets is 3, so LMS = 3 instead of original threshold 2. 
 
-
-\end{example}
 
 \begin{algorithm}[htbp]
     \caption{CFP-Growth}
     \hspace*{0.02in} {\bf Input:} %算法的输入
-    MIS-tree $T$
+    MIS-tree $T$; prefix $\alpha$\\
     \hspace*{0.02in} {\bf Output:} %算法的结果输出
     frequent itemsets $F$
     \begin{algorithmic}[1]
         \State $F\leftarrow \emptyset$
-        \State CFPGrowth()
-        
+        \For {each item $i$ in header table}
+        \State Generate pattern $\beta=i\cup\alpha$, support = i.support
+        \State Construct $\beta$'s conditional pattern base and 
+        \State conditional MIS-tree $T_\beta$
+        \If {$T_\beta\ne\emptyset$}
+        \State CFPGrowth($T_\beta,\beta,MIS(i)$)
+        \EndIf
+        \EndFor
+        \State {\bf end for}
     \State \Return frequent itemsets $F$
+    
+    \Function{CFPGrowth}{$Tree,\alpha,MIS(i)$}
+    \For{each i in the header table of $Tree$}
+    \State Generate pattern $\beta=i\cup\alpha$, support = i.support
+    \State Construct $\beta$'s conditional pattern base and 
+    \State conditional MIS-tree $T_\beta$
+    \If {$T_\beta\ne\emptyset$}
+    \If{$T_\beta$ contains a single path}
+    \For{ each combination $\gamma$ of nodes}
+    \State Generate pattern with $\gamma \cup \beta$,
+    \State support=min support of nodes in $\gamma$
+    \EndFor
+    \State {\bf end for}
+    \Else
+    \State CFPGrowth($T_\beta,\beta,MIS(i)$)
+    \EndIf
+    \EndIf
+    \EndFor
+    \State {\bf end for}
+    \EndFunction
     \end{algorithmic} 
     \label{alg5}
 \end{algorithm}
 
-\begin{figure}
-    \centering
-    \begin{forest}
-        [${Null}$
-          [a0
-            [b1]
-            [d1]
-          ]
-          [b0
-            [c0
-              [d1]
-            ]
-          ]
-        ]
-    \end{forest}
-    \begin{forest}
-        [${Null}$
-          [a0
-            [b1]
-            [d1]
-          ]
-          [b0
-            [c0
-              [d1]
-            ]
-          ]
-        ]
-    \end{forest}
-\caption{A MIS-Tree}
-\label{fig1}
-\end{figure}
+
+\section{Experiment}\label{sec5}
+In this section, we evaluate our algorithm in terms of utility and execution time. 
+There is no differentially private frequent itemset mining algorithm dealing with minimum multiple supports available for comparison.
+As a consequence, We adapt PrivBasis\cite{b7} to find all frequent itemsets and compare our algorithm against it.
+We use PB to denote PrivBasis in the rest of the paper.
+The algorithms are implemented in python3 and we conduct all experiments on a 64-bit Windows 10 PC with 3.40GHZ Intel i7-6700 CPU and 16GB RAM.
+Due to randomness in differential privacy, we run each algorithm ten times and report the averge results for each experiment.
+In our experiments, we use relative threshold. It is the percentage way to represent threshold as depicted in Definition~\ref{defthreshold}.
+We set the relative threshold $\lambda=0.01$ and the relevance parameter $\beta=0.25$ , and use MSApriori\cite{b2} as ground truth.
+We allocate the total privacy budget as the following heuristic: 
+$\varepsilon_1=min(0.05,\frac{\varepsilon}{10})$, $\varepsilon_2$ and $\varepsilon_1$ takes 40\% and 60\% of the rest privacy budget ($\varepsilon-\varepsilon_1$),respectively.
 
 
+\subsection{Datasets}
+We run our algorithm on the following six datasets.
+Five real-life datasets(BMS1, BMS2, BMS-POS, Kosarak, Retail) and one synthetic dataset(T10I4D100K) were used in the experiments.
+All of the datasets can be found on FIMI Repository \cite{b12}.
+Table \ref{dataset} provides key characteristics of these datasets.
 
+\begin{itemize}
+\item BMSWebView1(BMS1) and BMSWebView2(BMS2) contain several months of click stream data from two e-commerce website. Each transaction contains the web pages that a visitor viewed in one session. 
+\item BMS-POS contains POS data of electronics retailer over several years. Each transaction contains all the product categories that a customer purchased.
+\item Kosarak contains the clickstream data of a Hungarian news portal. Each transaction contains all web pages that a visitor clicked from the portal.
+\item Retail is a database that collected from an anonymous Belgian retail market over approximately five months. Each transaction is a set of products that a customer purchased.
+\item T10I4D100K is generated by IBM Almaden Quest market basket data generator.
+\end{itemize}
 
-\section{Experiment}
-We compare our algorithm with \cite{b7} in terms of utility and execution time. 
-We use PB to denote in method in \cite{b7}.
 \begin{table}[htbp]
     \caption{Dataset Characteristics}
-    \begin{center}
+    \centering    
     \begin{tabular}{|c|c|c|c|c|}
     \hline
-    Dataset    & n      & m     & max$|t|$ & avg$|t|$ \\ \hline
-    retail     & 88162  & 16470 & 76     & 10.3   \\ \hline
+    \textbf{Dataset}    & \textbf{n}      & \textbf{m}     & \textbf{max$|t|$} & \textbf{avg$|t|$} \\ \hline
     BMS1       & 59602  & 497   & 267    & 2.5    \\ \hline
     BMS2       & 77512  & 3340  & 161    & 5.0    \\ \hline
     BMS-POS    & 515597 & 1657  & 164    & 6.5    \\ \hline
-    kosarak    & 990002 & 41270 & 2498   & 8.1    \\ \hline
+    Retail     & 88162  & 16470 & 76     & 10.3   \\ \hline
+    Kosarak    & 990002 & 41270 & 2498   & 8.1    \\ \hline
     T10I4D100K & 100000 & 870   & 29     & 10.1   \\ \hline
     \end{tabular}
-    \end{center}
     \label{dataset}
 \end{table}
+
 \subsection{Metrics}
-We use F-score, a the widely used F-measure which is the harmonic mean of precision and recall.
+We use F-score, which is a widely used F-measure to evaluate utility of algorithms. 
+The larger the F-score, the higher the utility. 
+\begin{equation*}
+    precision = \frac{|U_p\cap U_c|}{|U_p|}, \ recall = \frac{|U_p\cap U_c|}{|U_c|},
+\end{equation*}
+where $U_p$ is the mined frequent itemsets, $U_c$ is the correct frequent itemsets. 
+F-score is the harmonic mean of precision and recall. 
+The equation below is the formal definition of F-score. 
+\begin{equation*}    
+    F-score = 2*\frac{precision*recall}{precision+recall}
+\end{equation*}
 
 \subsection{Experimental Results}
-\subsubsection{Utility}
+\subsubsection{Utility} 
+First, we compare the utility of the proposed DPCFP-growth++ method against PB. 
+Our algorithm finds all frequent itemsets with respect to a threshold while PB finds top-k frequent itemsets. 
+Since the aim of two algorithm is somewhat different, and using multiple support threshold decreases the number of mined frequent itemsets, 
+we set the k of PB to be larger than the number of true frequent itemsets under single threshold condition for a given threshold. 
+Table \ref{k} shows the output of Apriori and MSApriori and the k we set when threshold = 0.01. 
+Noted that this approach creates privacy concern since we need to run an unprotected FIM algorithm first and apply the output to PB.
+
+Fig. \ref{fscore}, \ref{Precision}, \ref{Recall} shows different privacy budgets on different datasets versus the F-score, precision and recall, respectively. 
+The results of F-score shows that our algorithm outperforms PB most of the time. 
+Only when privacy budget is small, our algorithm shows a slightly inferior result. 
+The reason behind this is that the large noise we added leads to more frequent 1-itemsets so that the LMS cannot exert its influence by pruning infrequent 1-itemsets.
+Also, the large noise of each MIS-tree node severely affect the precision. 
+A node has more descendants will have more noise after we update the MIS-tree.  
+Hence, the mining result will contain more redundant itemsets. 
+As the value of $\varepsilon$ increases, the noise of each node decreases, and the precision becomes more accurate. 
+ 
+Another interesting phenomenon is that the recall decreases in some dataset. 
+After further experiments, we find that it is caused by transaction truncation. 
+In Table \ref{loss}, we show the length constraint $\ell$ and the average of truncated items per truncated transaction. 
+When privacy budget is small, there are tremendous redundant itemsets, and the recall is high due to fortuitous. 
+As the privacy budget increases, the information loss of truncation gradually reveals. 
+In some dataset, the truncated part is large when comparing to the length constraint. 
+In Kosarak, the discarded items are even large enough to form a new transaction. 
+By contrast, the Retail and T10I4D100K only discard a small protion of information. 
+This explains why Kosarak dataset suffers the most serious decreasing in the recall.
+
+
+\begin{table}[htbp]
+    \caption{Rationale of k in PB}
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Dataset} & \textbf{\begin{tabular}[c]{@{}c@{}}frequent itemsets\\ Apriori\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}frequent itemsets\\ MSApriori\end{tabular}} & \textbf{k of PB} \\ \hline
+    BMS1             & 77                                                                           & 77                                                                             & 100              \\ \hline
+    BMS2             & 81                                                                           & 81                                                                             & 100              \\ \hline
+    BMS-POS          & 1099                                                                         & 646                                                                            & 1200             \\ \hline
+    Retail           & 159                                                                          & 147                                                                            & 180              \\ \hline
+    Kosarak          & 383                                                                          & 299                                                                            & 400              \\ \hline
+    T10I4D100K       & 385                                                                          & 384                                                                            & 400              \\ \hline
+    \end{tabular}
+    \label{k}
+    \end{table}
+% acceptable level
+%PB tends to generate long and many bases because of abundance of frequent 2-itemsets.
+
+\begin{table}[htbp]
+    \caption{Information Loss of Truncation}
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Dataset} &\textbf{$\ell$}& \textbf{\begin{tabular}[c]{@{}c@{}}\# of \\truncated transactions\end{tabular}} & \textbf{avg truncated items} \\ \hline
+    BMS1             &7 & 2737                                  & 8.0                          \\ \hline
+    BMS2             &15 & 3758                                  & 9.7                          \\ \hline
+    BMS-POS          &20 & 22867                                 & 8.8                          \\ \hline
+    Retail           &27 & 3920                                  & 7.8                          \\ \hline
+    Kosarak          &28 & 48841                                 & 45.1                         \\ \hline
+    T10I4D100K       &16 & 4820                                  & 2.3                          \\ \hline
+    \end{tabular}
+    \label{loss}
+\end{table}
+
 \subsubsection{Runtime}
-We find that the runtime of 
+Fig. \ref{runtime} shows the runtime of our algorithm and PB on six datasets with respect to different privacy budgets. 
+We find that the runtime of proposed algorithm is significantly lower than PB.
+In BMS-POS dataset, the execution time of PrivBasis is more than 4 hours while DPCFP-growth++ only needs about 35 seconds when $\varepsilon=2.35$.
+This is because of PB does not scale when k is large. 
+
+We find an interesting result that in some dataset the runtime is a little longer when privacy budget is small. 
+There are mainly two reasons for that. 
+The first is LMS cannot effectively reduce the search space. 
+The second is the tremendous redundant itemsets caused by noise after tree update.
+These are exact the same reason as the low precision mentioned in the previous paragraph.
+Despite this, DPCFP-growth++ still outperforms PB under almost every different $\varepsilon$ condition.
 
 
 %%%%use \eqref{eq}
@@ -823,7 +1044,6 @@ We find that the runtime of
 
 % \subsection{Some Common Mistakes}\label{SCM}
 % \begin{itemize}
-% \item The word ``data'' is plural, not singular.
 % \item Do not confuse ``imply'' and ``infer''.
 % \item The abbreviation ``i.e.'' means ``that is'', and the abbreviation ``e.g.'' means ``for example''.
 % \end{itemize}
@@ -878,76 +1098,167 @@ We find that the runtime of
 % \label{fig2}
 % \end{figure*}
 
-\begin{figure*}[t]
+\begin{figure*}[tb]
     \centering
     \subfloat[BMS1]{
-        \includegraphics[width=5.5cm]{F-score_BMS1.eps}
+        \includegraphics[width=4.5cm]{F-score_BMS1.eps}
     }
     \hfill
     \subfloat[BMS2]{
-        \includegraphics[width=5.5cm]{F-score_BMS2.eps}
+        \includegraphics[width=4.5cm]{F-score_BMS2.eps}
     }
     \hfill
     \subfloat[BMS-POS]{
-        \includegraphics[width=5.5cm]{F-score_BMS-POS.eps}
+        \includegraphics[width=4.5cm]{F-score_BMS-POS.eps}
     }
     \\
     \subfloat[Kosarak]{
-        \includegraphics[width=5.5cm]{F-score_kosarak.eps}
+        \includegraphics[width=4.5cm]{F-score_kosarak.eps}
     }
     \hfill
     \subfloat[Retail]{
-        \includegraphics[width=5.5cm]{F-score_retail.eps}
+        \includegraphics[width=4.5cm]{F-score_retail.eps}
     }
     \hfill
     \subfloat[T10I4D100K]{
-        \includegraphics[width=5.5cm]{F-score_T10I4D100K.eps}
+        \includegraphics[width=4.5cm]{F-score_T10I4D100K.eps}
     }
-\caption{F-score.}
+\caption{F-score}
 \label{fscore}
 \end{figure*}
 
-
-\begin{figure*}[htbp]
+\begin{figure*}[tb]
     \centering
-    \begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=5cm]{Runtime_BMS1.eps}
-    % \subcaption{BMS1}
-    \end{minipage}
+    \subfloat[BMS1]{
+        \includegraphics[width=4.5cm]{Precision_BMS1.eps}
+    }
     \hfill
-    \begin{minipage}[t]{0.3\textwidth}
     \centering
-    \includegraphics[width=5cm]{Runtime_BMS2.eps}
-    % \subcaption{BMS2}
-    \end{minipage}
+    \subfloat[BMS2]{
+        \includegraphics[width=4.5cm]{Precision_BMS2.eps}
+    }
     \hfill
-    \begin{minipage}[t]{0.3\textwidth}
     \centering
-    \includegraphics[width=5cm]{Runtime_BMS-POS.eps}
-    % \subcaption{BMS-POS}
-    \end{minipage}
-    
-    \begin{minipage}[t]{0.3\textwidth}
+    \subfloat[BMS-POS]{
+        \includegraphics[width=4.5cm]{Precision_BMS-POS.eps}
+    }
+    \\
     \centering
-    \includegraphics[width=5cm]{Runtime_kosarak.eps}
-    % \subcaption{Kosarak}
-    \end{minipage}
+    \subfloat[Kosarak]{
+        \includegraphics[width=4.5cm]{Precision_kosarak.eps}
+    }
     \hfill
-    \begin{minipage}[t]{0.3\textwidth}
     \centering
-    \includegraphics[width=5cm]{Runtime_retail.eps}
-    %\subcaption{Retail}
-    \end{minipage}
+    \subfloat[Retail]{
+        \includegraphics[width=4.5cm]{Precision_retail.eps}
+    }
     \hfill
-    \begin{minipage}[t]{0.3\textwidth}
     \centering
-    \includegraphics[width=5cm]{Runtime_T10I4D100K.eps}
-    %\subcaption{T10I4D100K}
-    \end{minipage}
-\caption{Runtime.}
-\label{fig3}
+    \subfloat[T10I4D100K]{
+        \includegraphics[width=4.5cm]{Precision_T10I4D100K.eps}
+    }
+\caption{Precision}
+\label{Precision}
 \end{figure*}
+
+\begin{figure*}[tb]
+    \centering
+    \subfloat[BMS1]{
+        \includegraphics[width=4.5cm]{Recall_BMS1.eps}
+    }
+    \hfill
+    \subfloat[BMS2]{
+        \includegraphics[width=4.5cm]{Recall_BMS2.eps}
+    }
+    \hfill
+    \subfloat[BMS-POS]{
+        \includegraphics[width=4.5cm]{Recall_BMS-POS.eps}
+    }
+    \\
+    \subfloat[Kosarak]{
+        \includegraphics[width=4.5cm]{Recall_kosarak.eps}
+    }
+    \hfill
+    \subfloat[Retail]{
+        \includegraphics[width=4.5cm]{Recall_retail.eps}
+    }
+    \hfill
+    \subfloat[T10I4D100K]{
+        \includegraphics[width=4.5cm]{Recall_T10I4D100K.eps}
+    }
+\caption{Recall}
+\label{Recall}
+\end{figure*}
+
+\begin{figure*}[tb]
+    \centering
+    \subfloat[BMS1]{
+        \includegraphics[width=4.5cm]{Runtime_BMS1.eps}
+    }
+    \hfill
+    \subfloat[BMS2]{
+        \includegraphics[width=4.5cm]{Runtime_BMS2.eps}
+    }
+    \hfill
+    \subfloat[BMS-POS]{
+        \includegraphics[width=4.5cm]{Runtime_BMS-POS.eps}
+    }
+    \\
+    \subfloat[Kosarak]{
+        \includegraphics[width=4.5cm]{Runtime_kosarak.eps}
+    }
+    \hfill
+    \subfloat[Retail]{
+        \includegraphics[width=4.5cm]{Runtime_retail.eps}
+    }
+    \hfill
+    \subfloat[T10I4D100K]{
+        \includegraphics[width=4.5cm]{Runtime_T10I4D100K.eps}
+    }
+\caption{Runtime}
+\label{runtime}
+\end{figure*}
+
+% \begin{figure*}[tb]
+%     \centering
+%     \begin{minipage}[t]{0.3\textwidth}
+%     \centering
+%     \includegraphics[width=5cm]{Runtime_BMS1.eps}
+%     % \subcaption{BMS1}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.3\textwidth}
+%     \centering
+%     \includegraphics[width=5cm]{Runtime_BMS2.eps}
+%     % \subcaption{BMS2}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.3\textwidth}
+%     \centering
+%     \includegraphics[width=5cm]{Runtime_BMS-POS.eps}
+%     % \subcaption{BMS-POS}
+%     \end{minipage}
+    
+%     \begin{minipage}[t]{0.3\textwidth}
+%     \centering
+%     \includegraphics[width=5cm]{Runtime_kosarak.eps}
+%     % \subcaption{Kosarak}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.3\textwidth}
+%     \centering
+%     \includegraphics[width=5cm]{Runtime_retail.eps}
+%     %\subcaption{Retail}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.3\textwidth}
+%     \centering
+%     \includegraphics[width=5cm]{Runtime_T10I4D100K.eps}
+%     %\subcaption{T10I4D100K}
+%     \end{minipage}
+% \caption{Runtime}
+% \label{runtime}
+% \end{figure*}
 
 % \section*{References}
 
@@ -967,23 +1278,56 @@ We find that the runtime of
 % Capitalize only the first word in a paper title, except for proper nouns and 
 % element symbols.
 
-\section{Conclusion}
-In this paper, we propose a novel differentially private algorithm for frequent itemset mining with multiple minimum supports.
+\section{Conclusion}\label{sec6}
+In this paper, we propose DPCFP-growth++, a novel differentially private algorithm for frequent itemset mining with multiple minimum supports. 
+
+The algorithm is composed of three stages. 
+The total privacy budget follows sequential composition theorem of differential privacy.
+In order to find frequent 1-itemsets and assign MIS, we first differential privately limit the length of transactions by random truncation to reduce the sensitivity. 
+Secondly, we apply Laplace noise to the accumulated support counts of truncated transactions.
+After that, we store the information of the database into a differentially private MIS-tree.
+Finally, by using regular DPCFP-growth++ algorithm, we can uncover the frequent itemsets.
+
+From the experiments on real-world and synthetic datasets, 
+we find our algorithm DPCFP-growth++ significantly outperforms current algorithm and achieves both high utility and high efficiency. 
+
+As for future work, there are some directions that we can utilize. 
+First of all, extend our work to high-utility itemset mining. 
+High-utility mining is an advanced setting of frequent itemset mining. 
+It takes the purchase quantities into account. 
+User can set unit profit for each item, and the total utility can be computed by the sum of the products of the quantities and unit profits.
+Literatures such as \cite{b22} adapted FP-growth-like algorithms which is similar to our work.
+
+Secondly, reduce the information loss. 
+Transaction splitting method in \cite{b20} seems a better idea than simply truncate transactions. 
+More specifically, it splits a long transaction into multiple pieces of small transcations and add them into the database while the random truncating method just neglects the items that are above length constraint.
+However, it needs more time to preprocess the dataset and may drastically slow down the total mining process.
 
 
-\begin{thebibliography}{00}%論文標題只有第一個字大寫
-\bibitem{b1} R. Agrawal, T. Imielinski, and A. Swami. ``Mining association rules between sets of items in large databases,'' in Proceedings of ACM-SIGMOD, 1993.
-\bibitem{b2} B. Liu, W. Hsu, and Y. Ma. ``Mining association rules with multiple minimum supports,'' in Proceedings of ACM-SIGKDD, 1999.
-\bibitem{b3} Y. Hu, and Y. Chen. ``Mining association rules with multiple minimum supports: a new mining algorithm and a support tuning mechanism,'' in Decision Support System, 2006.
-\bibitem{b4} R. Uday Kiran, and P. Krishna Reddy. ``Novel techniques to reduce search space in multiple minimum supports-based frequent pattern mining algorithms,'' in Proceedings of ACM-EDBT, 2011
-\bibitem{b5} W. Gan, J. C. Lin, P. Fournier-Viger, H. Chao, and J. Zhan. ``Mining of frequent patterns with multiple minimum supports,'' in Engineering Applications of Artificial Intelligence, 2017
-\bibitem{b6} C. Zeng, J. F. Naughton, and J. Cai, ``On differentially private frequent itemset mining,'' in VLDB, 2012.
-\bibitem{b7} N. Li, W. H. Qardaji, D. Su, and J. Cao, ``Privbasis: frequent itemset mining with differential privacy,'' in PVLDB, 2012.
-\bibitem{b8} J. Lee and C. W. Clifton, ``Top-k frequent itemsets via differentially private fp-trees,'' in KDD, 2014.
-\bibitem{b9} C. Dwork. Differential privacy. In ICALP, 2006.
-\bibitem{b10}Y. Chen and A. Machanavajjhala, “On the privacy properties of variants on the sparse vector technique,” CoRR, 2015.
-\bibitem{b11}J. Zhang, X. Xiao, and X. Xie, “Privtree: A differentially private algorithm for hierarchical decompositions,” in SIGMOD, 2016.
 
+\begin{thebibliography}{21}%論文標題只有第一個字大寫
+    \bibitem{b1} R. Agrawal, T. Imielinski, and A. Swami. ``Mining association rules between sets of items in large databases,'' in Proceedings of the 1993 ACM SIGMOD international conference on Management of data (SIGMOD '93), pp. 207-216, 1993.
+    \bibitem{b2} B. Liu, W. Hsu, and Y. Ma. ``Mining association rules with multiple minimum supports,'' in Proceedings of the 5th ACM SIGKDD international conference on Knowledge discovery and data Mining(KDD '99), 1999.
+    \bibitem{b3} Y. Hu, and Y. Chen. ``Mining association rules with multiple minimum supports: a new mining algorithm and a support tuning mechanism,'' in Decision Support System, vol. 42, no. 1, pp. 1-24, 2006.
+    \bibitem{b4} R. Uday Kiran, and P. Krishna Reddy. ``Novel techniques to reduce search space in multiple minimum supports-based frequent pattern mining algorithms,'' in Proceedings of the 14th International Conference on Extending Database Technology (EDBT/ICDT '11), pp. 11-20, 2011.
+    \bibitem{b5} W. Gan, J. C.-W. Lin, P. Fournier-Viger, H. Chao, and J. Zhan. ``Mining of frequent patterns with multiple minimum supports,'' in Engineering Applications of Artificial Intelligence, vol. 60, pp. 83-96, 2017.
+    \bibitem{b6} C. Zeng, J. F. Naughton, and J. -Y. Cai. ``On differentially private frequent itemset mining,'' in Proceedings of the VLDB Endowment, vol. 6, no. 1, pp. 25-36, 2012.
+    \bibitem{b7} N. Li, W. H. Qardaji, D. Su, and J. Cao. ``PrivBasis: Frequent itemset mining with differential privacy,'' in Proceedings of the VLDB Endowment, vol. 5, no. 11, pp. 1340-1351, 2012.
+    \bibitem{b8} J. Lee and C. W. Clifton. ``Top-k frequent itemsets via differentially private fp-trees,'' in Proceedings of the 20th ACM SIGKDD international conference on Knowledge discovery and data Mining(KDD '14), 2014.
+    \bibitem{b9} C. Dwork. ``Differential privacy,'' in 33rd International Colloquium on Automata, Languages and Programming (ICALP), pp.1-12, 2006.
+    \bibitem{b10}Y. Chen and A. Machanavajjhala. ``On the privacy properties of variants on the sparse vector technique,'' in CoRR, 2015.
+    \bibitem{b11}J. Zhang, X. Xiao, and X. Xie. ``PrivTree: A differentially private algorithm for hierarchical decompositions,'' in Proceedings of the 2016 International Conference on Management of Data (SIGMOD '16), pp. 155-170, 2016.
+    \bibitem{b12}Frequent Itemset Mining Implementations Repository. http://fimi.uantwerpen.be/data/, 2004
+    \bibitem{b13}A. Narayanan and V. Shmatikov. ``Robust de-anonymization of large sparse datasets,'' in IEEE Symposium on Security and Privacy (S \&P), pp. 111-125, 2008.
+    \bibitem{b14}P. Fournier-Viger, J.C.-W. Lin, B. Vo, T.T. Chi, J.Zhang, and H.B. Le. ``A survey of itemset mining,'' in WIREs Data Mining and Knowledge Discovery,vol. 7, no. 4, 2017.
+    \bibitem{b15}T. Zhu, G. Li, W.Zhou, P. S. Yu. ``Differentially private data publishing and analysis: a survey,'' in IEEE Transactions on Knowledge and Data Engineering (TKDE), vol. 29, no. 8, pp. 1619-1638, 2017.
+    \bibitem{b16}R. Agrawal, R. Srikant. ``Fast algorithms for mining association rules,''in Proceedings of the 20th International Conference on Very Large Data Bases (VLDB '94), pp. 487-499, 1994.
+    \bibitem{b17}J. Han, J. Pei, and Y. Yin. ``Mining frequent patterns without candidate generation,'' in Proceedings of the 2000 ACM SIGMOD international conference on Management of data (SIGMOD '00), pp. 1-12, 2000.
+    \bibitem{b18}Y.-H. Hu and Y.-L. Chen. ``Mining association rules with multiple minimum supports: a new mining algorithm and a support tuning mechanism,'' in Decision Support System, vol. 42, no. 1, pp. 1–24, 2006.
+    \bibitem{b19}R. Bhaskar, S. Laxman, A. Smith, and A. Thakurta. ``Discovering frequent patterns in sensitive data,'' in Proceedings of the 16th ACM SIGKDD international conference on Knowledge discovery and data mining (KDD '10), pp. 503–512, . 2010.
+    \bibitem{b20}S. Su, S. Xu, X. Cheng, Z. Li and F. Yang. ``Differentially private frequent itemset mining via transaction splitting,'' in IEEE Transactions on Knowledge and Data Engineering (TKDE), vol. 27, no. 7, pp. 1875-1891, 2015.
+    \bibitem{b21}N. Wang, X. Xiao, Y. Yang, Z. Zhang, Y. Gu and G. Yu. ``PrivSuper: a superset-first approach to frequent itemset mining under differential privacy,''in 2017 IEEE 33rd International Conference on Data Engineering (ICDE), pp. 809-820, 2017.
+    \bibitem{b22}V. S. Tseng, C. Wu, B. Shie, and P. S. Yu. ``UP-Growth: An efficient algorithm for high utility itemset mining,'' in Proceedings of the 16th ACM SIGKDD international conference on Knowledge discovery and data Mining(KDD '10), pp. 253–262, 2010.
 \end{thebibliography}
 
 

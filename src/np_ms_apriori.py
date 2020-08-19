@@ -196,7 +196,7 @@ if __name__ == '__main__':
     #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS
     T, n = ReadDataset(sys.argv[1])
 
-    rho, lam, phi = 0.25, 0.01, 1
+    rho, lam, phi = 0.25, 0.01, 5
     MS = assign_MIS(T, n, rho, lam)
     F, F_sup, info = ms_apriori_FIM(T, n, MS, phi)
     

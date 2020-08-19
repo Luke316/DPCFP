@@ -11,6 +11,7 @@ import pdb
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+import re
 
 # input 2 files and compare
 def compare2(NP,P):
@@ -94,17 +95,21 @@ def compare(dataset, times):
 def compare3(dataset,times,eps=1,k=0):
     non_private = {}
     NP_dataset='..\\reports\\ground_truth\\' + dataset + '_apriori_without_phi.csv'
+    # NP_dataset='..\\reports\\ground_truth\\' + dataset + '_apriori.csv'
+    # NP_dataset='..\\reports\\ground_truth\\single_threshold\\' + dataset + '.csv'
+
     with open(NP_dataset, "r") as f:
         result = csv.reader(f)
         for lines in result:
             non_private[lines[0]] = float(lines[1])
 
-    ep_1, ep_2, ep_3 = 0.05,0.4*(eps-0.05),0.6*(eps-0.05)
+    ep_1  = min(0.05,eps/10)
+    ep_2, ep_3 = 0.4*(eps-ep_1),0.6*(eps-ep_1)
     threshold = 0.01
 
     sum_precision, sum_recall, sum_F_score, sum_number = metrics(dataset,ep_1,ep_2,ep_3,times,non_private,k,threshold)
 
-    with open ('..\\reports\\mine_all\\0.95_2\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt', 'w', newline='') as f:
+    with open ('..\\reports\\mine_all\\0.95_new_eps1\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['K         ',k])
         writer.writerow(['Epsilons  ','({:.2f}/{:.2f}/{:.2f})'.format(ep_1,ep_2,ep_3)])
@@ -131,11 +136,11 @@ def plot(exp,dataset,):
         y2 = []
         y3 = []
         for eps in x:
-            for i, row in enumerate(open('..\\reports\\mine_all\\0.85\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.95_new_eps1\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==6:
                     row = row.strip('\n')                                 
                     y1.append(float(row.split(',')[1]))
-            for i, row in enumerate(open('..\\reports\\mine_all\\0.95\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.85_0.99\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==6:
                     row = row.strip('\n')                                 
                     y3.append(float(row.split(',')[1]))
@@ -143,9 +148,9 @@ def plot(exp,dataset,):
                 if i ==6:
                     row = row.strip('\n')                                 
                     y2.append(float(row.split(',')[1]))
-        plt.plot(x,y1,'o-',color = 'k', label="DPCFP++ 0.85")
+        plt.plot(x,y1,'o-',color = 'r', label="DPCFP++ 0.95")
         plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
-        plt.plot(x,y3,'s-',color = 'r', label="DPCFP++ 0.95")
+        # plt.plot(x,y3,'s-',color = 'r', label="0.85_0.99")
 
         plt.xlim(0.1,2.35)
         plt.ylim(0,1)
@@ -164,11 +169,11 @@ def plot(exp,dataset,):
         y2 = []
         y3 = []
         for eps in x:
-            for i, row in enumerate(open('..\\reports\\mine_all\\0.85\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.95_new_eps1\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==5:
                     row = row.strip('\n')                                 
                     y1.append(float(row.split(',')[1]))
-            for i, row in enumerate(open('..\\reports\\mine_all\\0.95\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.85_0.99\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==5:
                     row = row.strip('\n')                                 
                     y3.append(float(row.split(',')[1]))
@@ -176,9 +181,9 @@ def plot(exp,dataset,):
                 if i ==5:
                     row = row.strip('\n')                                 
                     y2.append(float(row.split(',')[1]))
-        plt.plot(x,y1,'o-',color = 'k', label="DPCFP++ 0.85")
+        plt.plot(x,y1,'o-',color = 'r', label="DPCFP++ 0.95")
         plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
-        plt.plot(x,y3,'s-',color = 'r', label="DPCFP++ 0.95")
+        # plt.plot(x,y3,'s-',color = 'r', label="0.85_0.99")
 
         plt.xlim(0.1,2.35)
         plt.ylim(0,1)
@@ -197,11 +202,11 @@ def plot(exp,dataset,):
         y2 = []
         y3 = []
         for eps in x:
-            for i, row in enumerate(open('..\\reports\\mine_all\\0.85\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.95_new_eps1\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==4:
                     row = row.strip('\n')                                 
                     y1.append(float(row.split(',')[1]))
-            for i, row in enumerate(open('..\\reports\\mine_all\\0.95\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
+            for i, row in enumerate(open('..\\reports\\mine_all\\0.85_0.99\\'+dataset+'_privacy_vs_utility_eps'+ str(eps) +'.txt')):
                 if i ==4:
                     row = row.strip('\n')                                 
                     y3.append(float(row.split(',')[1]))
@@ -209,9 +214,9 @@ def plot(exp,dataset,):
                 if i ==4:
                     row = row.strip('\n')                                 
                     y2.append(float(row.split(',')[1]))
-        plt.plot(x,y1,'o-',color = 'k', label="DPCFP++ 0.85")
+        plt.plot(x,y1,'o-',color = 'r', label="DPCFP++ 0.95")
         plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
-        plt.plot(x,y3,'s-',color = 'r', label="DPCFP++ 0.95")
+        # plt.plot(x,y3,'s-',color = 'r', label="0.85_0.99")
 
         plt.xlim(0.1,2.35)
         plt.ylim(0,1)
@@ -245,7 +250,7 @@ def plot(exp,dataset,):
         elif dataset == 'kosarak':
             y1=[32.832,32.466,32.276,32.612,32.343,32.323]
             y2=[55.691,124.489,107.668,107.376,95.644,109.498]
-            plt.ylim(0,150)
+            plt.ylim(0,180)
         elif dataset == 'T10I4D100K':
             y1=[30.619,19.691,19.458,19.273,19.085,19.237]
             y2=[37.919,38.940,39.984,39.480,38.819,39.889]
@@ -260,12 +265,137 @@ def plot(exp,dataset,):
         plt.ylabel('Time(sec)',fontsize=20, labelpad = 10)
         plt.xlabel('privacy budget',fontsize=20, labelpad = 10)
         plt.title(dataset)
-        plt.legend(loc = "lower right", fontsize=20)
+        plt.legend(loc = "upper left", fontsize=20)
         plt.grid(True, ls='--')
         # plt.show()
     
-    plt.savefig('..\\reports\\mine_all\\0.95\\figure\\'+exp+'_'+dataset+'.png')
-    plt.savefig('..\\reports\\mine_all\\0.95\\figure\\'+exp+'_'+dataset+'.eps',format = 'eps')
+    elif exp == 'MAE':
+        x = [0.1,0.55,1.0,1.45,1.9,2.35]
+        y1 = []
+        y2 = []
+        # y3 = []
+        MAE1 = 0
+        MAE2 = 0
+        # MRE = 0 
+        non_private = {}
+        NP_dataset='..\\reports\\ground_truth\\' + dataset + '_apriori_without_phi.csv'
+        with open(NP_dataset, "r") as f:
+            result = csv.reader(f)
+            for lines in result:
+                non_private[lines[0]] = float(lines[1])
+
+        for eps in x:
+            for i in range(0,10):
+                dpcfp = {}
+                z=0
+                for  index, row in enumerate(open('..\\reports\\mine_all\\0.95_new_eps1\\'+dataset+'_privacy'+str(eps)+'_vs_utility_'+ str(i) +'.csv')):
+                    *others, last =row.split(',')
+                    # print(str(re.findall(r'\[(.*?)\]', row)))
+                    # print(last)
+                    a =str(re.findall(r'\[(.*?)\]', row)).replace("'","")
+                    # print(a)
+                    dpcfp[a]=float(last)
+                    
+                for itemset in list(non_private.keys()):
+                    # print(itemset)
+                    if itemset in list(dpcfp.keys()):
+                        z+=1
+                        MAE1 += abs(dpcfp[itemset]-non_private[itemset])
+                    else:
+                        MAE1 += non_private[itemset]
+
+                if dataset == 'retail':
+                    pb={}
+                    with open('..\\..\\PrivBasis_python3\\reports\\retail_k180_eps'+ str(eps) + '_' +str(i)+'.csv') as F:
+                        noisy_result = csv.reader(F)
+                        for lines in noisy_result:
+                            pb[lines[0]]=float(lines[1])/88162
+                        for itemset in list(non_private.keys()):
+                            if itemset in list(pb.keys()):
+                                MAE2 += abs(pb[itemset]-non_private[itemset])
+                            else:
+                                MAE2 += non_private[itemset]
+                elif dataset == 'BMS1':
+                    pb={}
+                    with open('..\\..\\PrivBasis_python3\\reports\\BMS1_k100_eps'+ str(eps) + '_' +str(i)+'.csv') as F:
+                        noisy_result = csv.reader(F)
+                        for lines in noisy_result:
+                            pb[lines[0]]=float(lines[1])/59602
+                        for itemset in list(non_private.keys()):
+                            if itemset in list(pb.keys()):
+
+                                MAE2 += abs(pb[itemset]-non_private[itemset])
+                            else:
+                                MAE2 += non_private[itemset]
+                elif dataset == 'BMS2':
+                    pb={}
+                    with open('..\\..\\PrivBasis_python3\\reports\\BMS2_k100_eps'+ str(eps) + '_' +str(i)+'.csv') as F:
+                        noisy_result = csv.reader(F)
+                        for lines in noisy_result:
+                            pb[lines[0]]=float(lines[1])/77512
+                        for itemset in list(non_private.keys()):
+                            if itemset in list(pb.keys()):
+                                MAE2 += abs(pb[itemset]-non_private[itemset])
+                            else:
+                                MAE2 += non_private[itemset]
+                elif dataset == 'BMS-POS':
+                    pb={}
+                    with open('..\\..\\PrivBasis_python3\\reports\\BMS-POS_k1200_eps'+ str(eps) + '_' +str(i)+'.csv') as F:
+                        noisy_result = csv.reader(F)
+                        for lines in noisy_result:
+                            pb[lines[0]]=float(lines[1])/515597
+                        for itemset in list(non_private.keys()):
+                            if itemset in list(pb.keys()):
+                                MAE2 += abs(pb[itemset]-non_private[itemset])
+                            else:
+                                MAE2 += non_private[itemset]
+                elif dataset == 'T10I4D100K':
+                    pb={}
+                    with open('..\\..\\PrivBasis_python3\\reports\\T10I4D100K_k400_eps'+ str(eps) + '_' +str(i)+'.csv') as F:
+                        noisy_result = csv.reader(F)
+                        for lines in noisy_result:
+                            pb[lines[0]]=float(lines[1])/100000
+                        for itemset in list(non_private.keys()):
+                            if itemset in list(pb.keys()):
+                                MAE2 += abs(pb[itemset]-non_private[itemset])
+                            else:
+                                MAE2 += non_private[itemset]
+                elif dataset == 'kosarak':
+                    pb={}
+                    with open('..\\..\\PrivBasis_python3\\reports\\kosarak_k400_eps'+ str(eps) + '_' +str(i)+'.csv') as F:
+                        noisy_result = csv.reader(F)
+                        for lines in noisy_result:
+                            pb[lines[0]]=float(lines[1])/990002
+                        for itemset in list(non_private.keys()):
+                            if itemset in list(pb.keys()):
+                                MAE2 += abs(pb[itemset]-non_private[itemset])
+                            else:
+                                MAE2 += non_private[itemset]
+                # print(z)
+            MAE1 = MAE1/len(non_private.keys())/10
+            MAE2 = MAE2/len(non_private.keys())/10
+            # MRE = MRE/len(non_private.keys())/10
+            y1.append(MAE1)
+            y2.append(MAE2)
+            MAE1 ,MAE2 =0,0
+        # print(y1)
+        # print(y2)
+        plt.plot(x,y1,'o-',color = 'r', label="DPCFP++ 0.95")
+        plt.plot(x,y2,'2--',color = 'b', label="PrivBasis")
+        # plt.plot(x,y3,'s-',color = 'r', label="0.85_0.99")
+
+        plt.xlim(0.1,2.35)
+        plt.ylim(0,0.04)
+        plt.xticks(x,fontsize=20)
+        plt.yticks(fontsize=20)
+        plt.ylabel('MAE',fontsize=20, labelpad = 10)
+        plt.xlabel('privacy budget',fontsize=20, labelpad = 10)
+        plt.title(dataset)
+        plt.legend(loc = "upper right", fontsize=20)
+        plt.grid(True, ls='--')
+
+    plt.savefig('..\\reports\\mine_all\\0.95_new_eps1\\figure\\'+exp+'_'+dataset+'.png',bbox_inches = "tight")
+    plt.savefig('..\\reports\\mine_all\\0.95_new_eps1\\figure\\'+exp+'_'+dataset+'.eps',format = 'eps',bbox_inches = "tight")
 
 
         
@@ -281,7 +411,7 @@ def metrics(dataset,ep_1,ep_2,ep_3,times,non_private,k,threshold,beta=0.25):
     for i in range(0,times):
         private_topk = []
         T, n = ReadDataset(dataset)
-        truncatedT, items, truncated_length = TruncateDatabase(T,ep_1,n)
+        truncatedT, truncatedT2, items, truncated_length = TruncateDatabase(T,ep_1,n)
         sorted_MIS_table, support, LMS = MISTable(truncatedT,items,n,ep_2,truncated_length,threshold,beta)
         final_sorted_transactions = SortTransactions(truncatedT,sorted_MIS_table)
 
@@ -295,14 +425,14 @@ def metrics(dataset,ep_1,ep_2,ep_3,times,non_private,k,threshold,beta=0.25):
     
         master = MIStree()
         for transaction in final_sorted_transactions:
-            master.AddTransaction(transaction,n,ep_3,truncated_length)
+            master.AddTransaction(transaction,n,ep_3)
         Update(master.root)
         frequent_itemsets={}
         CFPGrowth(master, [], n,sorted_MIS_table,support,frequent_itemsets,LMS)
-        with open('..\\reports\\mine_all\\0.95_2\\'+dataset+'_privacy_vs_utility_'+str(i)+'.csv', 'w',) as f:
+        with open('..\\reports\\mine_all\\0.95_new_eps1\\'+dataset+'_privacy'+str(ep_1+ep_2+ep_3)+'_vs_utility_'+str(i)+'.csv', 'w',) as f:
             for key in frequent_itemsets.keys():
                 f.write("%s,%s\n"%(key,frequent_itemsets[key]))
-        
+        # pdb.set_trace()
         topk_private = Counter(frequent_itemsets)
         topk_non_private = Counter(non_private)
 
@@ -377,7 +507,7 @@ if __name__ == '__main__':
     #T10I4D100K retail kosarak BMS1 BMS2 accidents BMS-POS 
     # accidents is too big
 
-    # for ep in range(10,281,45):
+    # for ep in range(10,236,45):
     #     compare3('BMS2',10,ep/100,0) 
     #     compare3('BMS1',10,ep/100,0)
     #     compare3('retail',10,ep/100,0)
@@ -385,13 +515,12 @@ if __name__ == '__main__':
     #     compare3('kosarak',10,ep/100,0)
     #     compare3('BMS-POS',10,ep/100,0)
     
-    # compare3('BMS2',10,1,0) 
-    # compare3('BMS1',10,1,0) 
-    # compare3('kosarak',10,1,0) 
-    # compare3('BMS-POS',10,1,0)
-    # compare3('retail',10,1,0)
-    # compare3('T10I4D100K',10,1,0)
-
+    # compare3('BMS2',1,0,0) 
+    # compare3('BMS1',1,0,0) 
+    # compare3('kosarak',1,0,0) 
+    # compare3('BMS-POS',1,0,0)
+    # compare3('retail',1,0,0)
+    # compare3('T10I4D100K',1,0,0)
 
     #NP_dataset='..\\reports\\ground_truth\\' + sys.argv[1] + '_apriori.csv'
     #P_datasaet = 'output.csv'
@@ -404,4 +533,6 @@ if __name__ == '__main__':
         # plot('Precision',dataset)
         # plot('Recall',dataset)
         plot('Runtime',dataset)
+        # plot('MAE',dataset)
+    # plot('MAE','retail')
 

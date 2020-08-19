@@ -104,26 +104,43 @@ def TruncateDatabase(dataset,epsilon,n):
     
     summation =0.0
     truncated_length = 0.0
+    truncated_length2= 0.0
+    b = False #make sure loop continue without changing truncated_length
     for index, noisy_count in enumerate(noisy_length_distribution, start=1) :
         summation += noisy_count
-        if summation >= (0.85):
+        if summation >= (0.95) and b == False:
             truncated_length = index
+            b = True
+            # break
+        if summation >= (0.99):
+            truncated_length2 = index
             break
-    
+    # print(truncated_length,truncated_length2)
+
+    # number_of_long_items =0
+    # total_truncated_items=0
+    # for transaction in dataset:
+    #     if len(transaction)>truncated_length:
+    #         number_of_long_items+=1
+    #         total_truncated_items = total_truncated_items + len(transaction)-truncated_length
+    # print(number_of_long_items,total_truncated_items,total_truncated_items/number_of_long_items)
+
     #print('truncated_length=',truncated_length)
     T_truncated= Truncate(truncated_length,dataset) 
+    T_truncated2=Truncate(truncated_length2,dataset)
     
     #time_used = time() - time_start
     #print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
-    return T_truncated, items, truncated_length
+    return T_truncated,T_truncated2 , items, truncated_length
 
 
 if __name__ == '__main__': #if file wasn't imported.
     #D_name = 'accidents'
-    D_name = 'T10I4D100K'
-
+    # D_name = 'kosarak'
+    D = ['BMS1', 'BMS2','retail','kosarak','BMS-POS','T10I4D100K']
     # To clarify, the initial dataset is called D
     # after reading the dataset, I call it T
-    T, n = ReadDataset(D_name)
-    truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
+    for D_name in D:
+        T, n = ReadDataset(D_name)
+        truncatedT,truncatedT2, items, truncated_length = TruncateDatabase(T,0.05,n)
 

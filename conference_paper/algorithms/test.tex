@@ -3,6 +3,7 @@
 \usepackage{algorithmicx,algorithm}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{forest}
  
 
 \begin{document}
@@ -41,6 +42,22 @@
     \end{algorithmic}
     
 \end{algorithm}
+
+\begin{forest}
+    [${Null}$,circle,draw
+    ]
+\end{forest}
+\begin{forest}
+    [${Null}$,circle,draw
+        [{b,0},circle,draw
+            [{a,1},circle,draw
+                [{e,1},circle,draw]
+                [{f,1},circle,draw]
+            ]
+        ]
+    ]
+\end{forest}
+
 
 \begin{algorithm}[t]
     \caption{FrequentItemsAndMISTable}

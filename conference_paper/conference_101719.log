@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2020.2.13)  6 JUN 2020 13:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2020.2.13)  20 JUL 2020 10:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -637,113 +637,286 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 LaTeX Font Info:    Trying to load font information for U+msb on input line 53.
  (d:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1{d:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+) [1{d:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
-] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 251--253
+] [2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 315--317
 \OT1/ptm/m/it/10 The min-i-mum item sup-port of a k-itemset $\OML/cmm/m/it/10 X \OT1/cmr/m/n/10 =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 251--253
+Underfull \hbox (badness 10000) in paragraph at lines 315--317
 
  []
 
-LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 261.
+LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 325.
 (d:/texlive/2019/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 261.
- [3] [4] [5]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 325.
+ [4] [5]
+Underfull \vbox (badness 2970) has occurred while \output is active []
+
+ [6]
+Underfull \hbox (badness 10000) in paragraph at lines 924--925
+[]\OT1/ptm/m/n/10 BMSWebView1(BMS1) and BM-SWe-b-View2(BMS2)
+ []
+
+[7] [8]
 Package epstopdf Info: Source file: <F-score_BMS1.eps>
-(epstopdf)                    date: 2020-05-14 11:15:20
-(epstopdf)                    size: 38399 bytes
+(epstopdf)                    date: 2020-06-09 09:54:08
+(epstopdf)                    size: 38573 bytes
 (epstopdf)             Output file: <F-score_BMS1-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-05-14 11:17:56
-(epstopdf)                    size: 20308 bytes
+(epstopdf)                    date: 2020-06-22 02:03:25
+(epstopdf)                    size: 20320 bytes
 (epstopdf)             Command: <repstopdf --outfile=F-score_BMS1-eps-converted-to.pdf F-score_BMS1.eps>
-(epstopdf)             \includegraphics on input line 885.
+(epstopdf)             \includegraphics on input line 1105.
 Package epstopdf Info: Output file is already uptodate.
-<F-score_BMS1-eps-converted-to.pdf, id=35, 578.16pt x 578.16pt>
+<F-score_BMS1-eps-converted-to.pdf, id=47, 578.16pt x 578.16pt>
 File: F-score_BMS1-eps-converted-to.pdf Graphic file (type pdf)
 <use F-score_BMS1-eps-converted-to.pdf>
-Package pdftex.def Info: F-score_BMS1-eps-converted-to.pdf  used on input line 885.
-(pdftex.def)             Requested size: 156.49014pt x 156.48462pt.
+Package pdftex.def Info: F-score_BMS1-eps-converted-to.pdf  used on input line 1105.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <F-score_BMS2.eps>
-(epstopdf)                    date: 2020-05-14 11:15:21
-(epstopdf)                    size: 38396 bytes
+(epstopdf)                    date: 2020-06-09 09:54:08
+(epstopdf)                    size: 38571 bytes
 (epstopdf)             Output file: <F-score_BMS2-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-05-14 11:30:22
+(epstopdf)                    date: 2020-06-22 02:03:27
 (epstopdf)                    size: 20318 bytes
 (epstopdf)             Command: <repstopdf --outfile=F-score_BMS2-eps-converted-to.pdf F-score_BMS2.eps>
-(epstopdf)             \includegraphics on input line 889.
+(epstopdf)             \includegraphics on input line 1109.
 Package epstopdf Info: Output file is already uptodate.
-<F-score_BMS2-eps-converted-to.pdf, id=36, 578.16pt x 578.16pt>
+<F-score_BMS2-eps-converted-to.pdf, id=48, 578.16pt x 578.16pt>
 File: F-score_BMS2-eps-converted-to.pdf Graphic file (type pdf)
 <use F-score_BMS2-eps-converted-to.pdf>
-Package pdftex.def Info: F-score_BMS2-eps-converted-to.pdf  used on input line 889.
-(pdftex.def)             Requested size: 156.49014pt x 156.48462pt.
+Package pdftex.def Info: F-score_BMS2-eps-converted-to.pdf  used on input line 1109.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <F-score_BMS-POS.eps>
-(epstopdf)                    date: 2020-05-14 11:15:23
-(epstopdf)                    size: 39059 bytes
+(epstopdf)                    date: 2020-06-09 09:54:10
+(epstopdf)                    size: 39233 bytes
 (epstopdf)             Output file: <F-score_BMS-POS-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-05-23 22:35:19
-(epstopdf)                    size: 20733 bytes
+(epstopdf)                    date: 2020-06-22 02:03:29
+(epstopdf)                    size: 20744 bytes
 (epstopdf)             Command: <repstopdf --outfile=F-score_BMS-POS-eps-converted-to.pdf F-score_BMS-POS.eps>
-(epstopdf)             \includegraphics on input line 893.
+(epstopdf)             \includegraphics on input line 1113.
 Package epstopdf Info: Output file is already uptodate.
-<F-score_BMS-POS-eps-converted-to.pdf, id=37, 578.16pt x 578.16pt>
+<F-score_BMS-POS-eps-converted-to.pdf, id=49, 578.16pt x 578.16pt>
 File: F-score_BMS-POS-eps-converted-to.pdf Graphic file (type pdf)
 <use F-score_BMS-POS-eps-converted-to.pdf>
-Package pdftex.def Info: F-score_BMS-POS-eps-converted-to.pdf  used on input line 893.
-(pdftex.def)             Requested size: 156.49014pt x 156.48462pt.
+Package pdftex.def Info: F-score_BMS-POS-eps-converted-to.pdf  used on input line 1113.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <F-score_kosarak.eps>
-(epstopdf)                    date: 2020-05-14 11:15:22
-(epstopdf)                    size: 37644 bytes
+(epstopdf)                    date: 2020-06-09 09:54:09
+(epstopdf)                    size: 37817 bytes
 (epstopdf)             Output file: <F-score_kosarak-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-05-23 22:39:09
-(epstopdf)                    size: 19802 bytes
+(epstopdf)                    date: 2020-06-22 02:03:31
+(epstopdf)                    size: 19807 bytes
 (epstopdf)             Command: <repstopdf --outfile=F-score_kosarak-eps-converted-to.pdf F-score_kosarak.eps>
-(epstopdf)             \includegraphics on input line 897.
+(epstopdf)             \includegraphics on input line 1117.
 Package epstopdf Info: Output file is already uptodate.
-<F-score_kosarak-eps-converted-to.pdf, id=38, 578.16pt x 578.16pt>
+<F-score_kosarak-eps-converted-to.pdf, id=50, 578.16pt x 578.16pt>
 File: F-score_kosarak-eps-converted-to.pdf Graphic file (type pdf)
 <use F-score_kosarak-eps-converted-to.pdf>
-Package pdftex.def Info: F-score_kosarak-eps-converted-to.pdf  used on input line 897.
-(pdftex.def)             Requested size: 156.49014pt x 156.48462pt.
+Package pdftex.def Info: F-score_kosarak-eps-converted-to.pdf  used on input line 1117.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <F-score_retail.eps>
-(epstopdf)                    date: 2020-05-14 11:15:21
-(epstopdf)                    size: 37152 bytes
+(epstopdf)                    date: 2020-06-09 09:54:09
+(epstopdf)                    size: 37326 bytes
 (epstopdf)             Output file: <F-score_retail-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-05-23 22:39:12
-(epstopdf)                    size: 19606 bytes
+(epstopdf)                    date: 2020-06-22 02:03:33
+(epstopdf)                    size: 19616 bytes
 (epstopdf)             Command: <repstopdf --outfile=F-score_retail-eps-converted-to.pdf F-score_retail.eps>
-(epstopdf)             \includegraphics on input line 901.
+(epstopdf)             \includegraphics on input line 1121.
 Package epstopdf Info: Output file is already uptodate.
-<F-score_retail-eps-converted-to.pdf, id=39, 578.16pt x 578.16pt>
+<F-score_retail-eps-converted-to.pdf, id=51, 578.16pt x 578.16pt>
 File: F-score_retail-eps-converted-to.pdf Graphic file (type pdf)
 <use F-score_retail-eps-converted-to.pdf>
-Package pdftex.def Info: F-score_retail-eps-converted-to.pdf  used on input line 901.
-(pdftex.def)             Requested size: 156.49014pt x 156.48462pt.
+Package pdftex.def Info: F-score_retail-eps-converted-to.pdf  used on input line 1121.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <F-score_T10I4D100K.eps>
-(epstopdf)                    date: 2020-05-14 11:15:24
-(epstopdf)                    size: 38929 bytes
+(epstopdf)                    date: 2020-06-09 09:54:10
+(epstopdf)                    size: 39105 bytes
 (epstopdf)             Output file: <F-score_T10I4D100K-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-05-23 22:39:14
-(epstopdf)                    size: 20599 bytes
+(epstopdf)                    date: 2020-06-22 02:03:35
+(epstopdf)                    size: 20609 bytes
 (epstopdf)             Command: <repstopdf --outfile=F-score_T10I4D100K-eps-converted-to.pdf F-score_T10I4D100K.eps>
-(epstopdf)             \includegraphics on input line 905.
+(epstopdf)             \includegraphics on input line 1125.
 Package epstopdf Info: Output file is already uptodate.
-<F-score_T10I4D100K-eps-converted-to.pdf, id=40, 578.16pt x 578.16pt>
+<F-score_T10I4D100K-eps-converted-to.pdf, id=52, 578.16pt x 578.16pt>
 File: F-score_T10I4D100K-eps-converted-to.pdf Graphic file (type pdf)
 <use F-score_T10I4D100K-eps-converted-to.pdf>
-Package pdftex.def Info: F-score_T10I4D100K-eps-converted-to.pdf  used on input line 905.
-(pdftex.def)             Requested size: 156.49014pt x 156.48462pt.
+Package pdftex.def Info: F-score_T10I4D100K-eps-converted-to.pdf  used on input line 1125.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Precision_BMS1.eps>
+(epstopdf)                    date: 2020-06-09 09:54:08
+(epstopdf)                    size: 39347 bytes
+(epstopdf)             Output file: <Precision_BMS1-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:37
+(epstopdf)                    size: 20598 bytes
+(epstopdf)             Command: <repstopdf --outfile=Precision_BMS1-eps-converted-to.pdf Precision_BMS1.eps>
+(epstopdf)             \includegraphics on input line 1134.
+Package epstopdf Info: Output file is already uptodate.
+<Precision_BMS1-eps-converted-to.pdf, id=53, 578.16pt x 578.16pt>
+File: Precision_BMS1-eps-converted-to.pdf Graphic file (type pdf)
+<use Precision_BMS1-eps-converted-to.pdf>
+Package pdftex.def Info: Precision_BMS1-eps-converted-to.pdf  used on input line 1134.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Precision_BMS2.eps>
+(epstopdf)                    date: 2020-06-09 09:54:08
+(epstopdf)                    size: 39360 bytes
+(epstopdf)             Output file: <Precision_BMS2-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:39
+(epstopdf)                    size: 20625 bytes
+(epstopdf)             Command: <repstopdf --outfile=Precision_BMS2-eps-converted-to.pdf Precision_BMS2.eps>
+(epstopdf)             \includegraphics on input line 1139.
+Package epstopdf Info: Output file is already uptodate.
+<Precision_BMS2-eps-converted-to.pdf, id=54, 578.16pt x 578.16pt>
+File: Precision_BMS2-eps-converted-to.pdf Graphic file (type pdf)
+<use Precision_BMS2-eps-converted-to.pdf>
+Package pdftex.def Info: Precision_BMS2-eps-converted-to.pdf  used on input line 1139.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Precision_BMS-POS.eps>
+(epstopdf)                    date: 2020-06-09 09:54:10
+(epstopdf)                    size: 40147 bytes
+(epstopdf)             Output file: <Precision_BMS-POS-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:41
+(epstopdf)                    size: 21256 bytes
+(epstopdf)             Command: <repstopdf --outfile=Precision_BMS-POS-eps-converted-to.pdf Precision_BMS-POS.eps>
+(epstopdf)             \includegraphics on input line 1144.
+Package epstopdf Info: Output file is already uptodate.
+<Precision_BMS-POS-eps-converted-to.pdf, id=55, 578.16pt x 578.16pt>
+File: Precision_BMS-POS-eps-converted-to.pdf Graphic file (type pdf)
+<use Precision_BMS-POS-eps-converted-to.pdf>
+Package pdftex.def Info: Precision_BMS-POS-eps-converted-to.pdf  used on input line 1144.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Precision_kosarak.eps>
+(epstopdf)                    date: 2020-06-09 09:54:09
+(epstopdf)                    size: 38614 bytes
+(epstopdf)             Output file: <Precision_kosarak-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:43
+(epstopdf)                    size: 20098 bytes
+(epstopdf)             Command: <repstopdf --outfile=Precision_kosarak-eps-converted-to.pdf Precision_kosarak.eps>
+(epstopdf)             \includegraphics on input line 1149.
+Package epstopdf Info: Output file is already uptodate.
+<Precision_kosarak-eps-converted-to.pdf, id=56, 578.16pt x 578.16pt>
+File: Precision_kosarak-eps-converted-to.pdf Graphic file (type pdf)
+<use Precision_kosarak-eps-converted-to.pdf>
+Package pdftex.def Info: Precision_kosarak-eps-converted-to.pdf  used on input line 1149.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Precision_retail.eps>
+(epstopdf)                    date: 2020-06-09 09:54:09
+(epstopdf)                    size: 38121 bytes
+(epstopdf)             Output file: <Precision_retail-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:45
+(epstopdf)                    size: 19907 bytes
+(epstopdf)             Command: <repstopdf --outfile=Precision_retail-eps-converted-to.pdf Precision_retail.eps>
+(epstopdf)             \includegraphics on input line 1154.
+Package epstopdf Info: Output file is already uptodate.
+<Precision_retail-eps-converted-to.pdf, id=57, 578.16pt x 578.16pt>
+File: Precision_retail-eps-converted-to.pdf Graphic file (type pdf)
+<use Precision_retail-eps-converted-to.pdf>
+Package pdftex.def Info: Precision_retail-eps-converted-to.pdf  used on input line 1154.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Precision_T10I4D100K.eps>
+(epstopdf)                    date: 2020-06-09 09:54:10
+(epstopdf)                    size: 39901 bytes
+(epstopdf)             Output file: <Precision_T10I4D100K-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:47
+(epstopdf)                    size: 20914 bytes
+(epstopdf)             Command: <repstopdf --outfile=Precision_T10I4D100K-eps-converted-to.pdf Precision_T10I4D100K.eps>
+(epstopdf)             \includegraphics on input line 1159.
+Package epstopdf Info: Output file is already uptodate.
+<Precision_T10I4D100K-eps-converted-to.pdf, id=58, 578.16pt x 578.16pt>
+File: Precision_T10I4D100K-eps-converted-to.pdf Graphic file (type pdf)
+<use Precision_T10I4D100K-eps-converted-to.pdf>
+Package pdftex.def Info: Precision_T10I4D100K-eps-converted-to.pdf  used on input line 1159.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Recall_BMS1.eps>
+(epstopdf)                    date: 2020-06-09 09:54:08
+(epstopdf)                    size: 39048 bytes
+(epstopdf)             Output file: <Recall_BMS1-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:49
+(epstopdf)                    size: 20518 bytes
+(epstopdf)             Command: <repstopdf --outfile=Recall_BMS1-eps-converted-to.pdf Recall_BMS1.eps>
+(epstopdf)             \includegraphics on input line 1168.
+Package epstopdf Info: Output file is already uptodate.
+<Recall_BMS1-eps-converted-to.pdf, id=59, 578.16pt x 578.16pt>
+File: Recall_BMS1-eps-converted-to.pdf Graphic file (type pdf)
+<use Recall_BMS1-eps-converted-to.pdf>
+Package pdftex.def Info: Recall_BMS1-eps-converted-to.pdf  used on input line 1168.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Recall_BMS2.eps>
+(epstopdf)                    date: 2020-06-09 09:54:09
+(epstopdf)                    size: 39087 bytes
+(epstopdf)             Output file: <Recall_BMS2-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:51
+(epstopdf)                    size: 20538 bytes
+(epstopdf)             Command: <repstopdf --outfile=Recall_BMS2-eps-converted-to.pdf Recall_BMS2.eps>
+(epstopdf)             \includegraphics on input line 1172.
+Package epstopdf Info: Output file is already uptodate.
+<Recall_BMS2-eps-converted-to.pdf, id=60, 578.16pt x 578.16pt>
+File: Recall_BMS2-eps-converted-to.pdf Graphic file (type pdf)
+<use Recall_BMS2-eps-converted-to.pdf>
+Package pdftex.def Info: Recall_BMS2-eps-converted-to.pdf  used on input line 1172.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Recall_BMS-POS.eps>
+(epstopdf)                    date: 2020-06-09 09:54:10
+(epstopdf)                    size: 39869 bytes
+(epstopdf)             Output file: <Recall_BMS-POS-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:53
+(epstopdf)                    size: 21167 bytes
+(epstopdf)             Command: <repstopdf --outfile=Recall_BMS-POS-eps-converted-to.pdf Recall_BMS-POS.eps>
+(epstopdf)             \includegraphics on input line 1176.
+Package epstopdf Info: Output file is already uptodate.
+<Recall_BMS-POS-eps-converted-to.pdf, id=61, 578.16pt x 578.16pt>
+File: Recall_BMS-POS-eps-converted-to.pdf Graphic file (type pdf)
+<use Recall_BMS-POS-eps-converted-to.pdf>
+Package pdftex.def Info: Recall_BMS-POS-eps-converted-to.pdf  used on input line 1176.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Recall_kosarak.eps>
+(epstopdf)                    date: 2020-06-09 09:54:10
+(epstopdf)                    size: 38936 bytes
+(epstopdf)             Output file: <Recall_kosarak-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:55
+(epstopdf)                    size: 20442 bytes
+(epstopdf)             Command: <repstopdf --outfile=Recall_kosarak-eps-converted-to.pdf Recall_kosarak.eps>
+(epstopdf)             \includegraphics on input line 1180.
+Package epstopdf Info: Output file is already uptodate.
+<Recall_kosarak-eps-converted-to.pdf, id=62, 578.16pt x 578.16pt>
+File: Recall_kosarak-eps-converted-to.pdf Graphic file (type pdf)
+<use Recall_kosarak-eps-converted-to.pdf>
+Package pdftex.def Info: Recall_kosarak-eps-converted-to.pdf  used on input line 1180.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Recall_retail.eps>
+(epstopdf)                    date: 2020-06-09 09:54:09
+(epstopdf)                    size: 37436 bytes
+(epstopdf)             Output file: <Recall_retail-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:57
+(epstopdf)                    size: 19495 bytes
+(epstopdf)             Command: <repstopdf --outfile=Recall_retail-eps-converted-to.pdf Recall_retail.eps>
+(epstopdf)             \includegraphics on input line 1184.
+Package epstopdf Info: Output file is already uptodate.
+<Recall_retail-eps-converted-to.pdf, id=63, 578.16pt x 578.16pt>
+File: Recall_retail-eps-converted-to.pdf Graphic file (type pdf)
+<use Recall_retail-eps-converted-to.pdf>
+Package pdftex.def Info: Recall_retail-eps-converted-to.pdf  used on input line 1184.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+Package epstopdf Info: Source file: <Recall_T10I4D100K.eps>
+(epstopdf)                    date: 2020-06-09 09:54:11
+(epstopdf)                    size: 39599 bytes
+(epstopdf)             Output file: <Recall_T10I4D100K-eps-converted-to.pdf>
+(epstopdf)                    date: 2020-06-22 02:03:59
+(epstopdf)                    size: 20826 bytes
+(epstopdf)             Command: <repstopdf --outfile=Recall_T10I4D100K-eps-converted-to.pdf Recall_T10I4D100K.eps>
+(epstopdf)             \includegraphics on input line 1188.
+Package epstopdf Info: Output file is already uptodate.
+<Recall_T10I4D100K-eps-converted-to.pdf, id=64, 578.16pt x 578.16pt>
+File: Recall_T10I4D100K-eps-converted-to.pdf Graphic file (type pdf)
+<use Recall_T10I4D100K-eps-converted-to.pdf>
+Package pdftex.def Info: Recall_T10I4D100K-eps-converted-to.pdf  used on input line 1188.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <Runtime_BMS1.eps>
 (epstopdf)                    date: 2020-05-30 18:06:43
 (epstopdf)                    size: 40014 bytes
@@ -751,13 +924,13 @@ Package epstopdf Info: Source file: <Runtime_BMS1.eps>
 (epstopdf)                    date: 2020-05-30 20:48:03
 (epstopdf)                    size: 21541 bytes
 (epstopdf)             Command: <repstopdf --outfile=Runtime_BMS1-eps-converted-to.pdf Runtime_BMS1.eps>
-(epstopdf)             \includegraphics on input line 915.
+(epstopdf)             \includegraphics on input line 1197.
 Package epstopdf Info: Output file is already uptodate.
-<Runtime_BMS1-eps-converted-to.pdf, id=41, 578.16pt x 578.16pt>
+<Runtime_BMS1-eps-converted-to.pdf, id=65, 578.16pt x 578.16pt>
 File: Runtime_BMS1-eps-converted-to.pdf Graphic file (type pdf)
 <use Runtime_BMS1-eps-converted-to.pdf>
-Package pdftex.def Info: Runtime_BMS1-eps-converted-to.pdf  used on input line 915.
-(pdftex.def)             Requested size: 142.26378pt x 142.26357pt.
+Package pdftex.def Info: Runtime_BMS1-eps-converted-to.pdf  used on input line 1197.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <Runtime_BMS2.eps>
 (epstopdf)                    date: 2020-05-30 18:06:43
 (epstopdf)                    size: 40014 bytes
@@ -765,13 +938,13 @@ Package epstopdf Info: Source file: <Runtime_BMS2.eps>
 (epstopdf)                    date: 2020-05-30 20:48:05
 (epstopdf)                    size: 21539 bytes
 (epstopdf)             Command: <repstopdf --outfile=Runtime_BMS2-eps-converted-to.pdf Runtime_BMS2.eps>
-(epstopdf)             \includegraphics on input line 921.
+(epstopdf)             \includegraphics on input line 1201.
 Package epstopdf Info: Output file is already uptodate.
-<Runtime_BMS2-eps-converted-to.pdf, id=42, 578.16pt x 578.16pt>
+<Runtime_BMS2-eps-converted-to.pdf, id=66, 578.16pt x 578.16pt>
 File: Runtime_BMS2-eps-converted-to.pdf Graphic file (type pdf)
 <use Runtime_BMS2-eps-converted-to.pdf>
-Package pdftex.def Info: Runtime_BMS2-eps-converted-to.pdf  used on input line 921.
-(pdftex.def)             Requested size: 142.26378pt x 142.26357pt.
+Package pdftex.def Info: Runtime_BMS2-eps-converted-to.pdf  used on input line 1201.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <Runtime_BMS-POS.eps>
 (epstopdf)                    date: 2020-05-30 18:06:43
 (epstopdf)                    size: 43989 bytes
@@ -779,13 +952,13 @@ Package epstopdf Info: Source file: <Runtime_BMS-POS.eps>
 (epstopdf)                    date: 2020-05-30 20:48:07
 (epstopdf)                    size: 22270 bytes
 (epstopdf)             Command: <repstopdf --outfile=Runtime_BMS-POS-eps-converted-to.pdf Runtime_BMS-POS.eps>
-(epstopdf)             \includegraphics on input line 927.
+(epstopdf)             \includegraphics on input line 1205.
 Package epstopdf Info: Output file is already uptodate.
-<Runtime_BMS-POS-eps-converted-to.pdf, id=43, 578.16pt x 578.16pt>
+<Runtime_BMS-POS-eps-converted-to.pdf, id=67, 578.16pt x 578.16pt>
 File: Runtime_BMS-POS-eps-converted-to.pdf Graphic file (type pdf)
 <use Runtime_BMS-POS-eps-converted-to.pdf>
-Package pdftex.def Info: Runtime_BMS-POS-eps-converted-to.pdf  used on input line 927.
-(pdftex.def)             Requested size: 142.26378pt x 142.26357pt.
+Package pdftex.def Info: Runtime_BMS-POS-eps-converted-to.pdf  used on input line 1205.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <Runtime_kosarak.eps>
 (epstopdf)                    date: 2020-05-30 18:06:43
 (epstopdf)                    size: 41191 bytes
@@ -793,13 +966,13 @@ Package epstopdf Info: Source file: <Runtime_kosarak.eps>
 (epstopdf)                    date: 2020-05-30 20:48:09
 (epstopdf)                    size: 21506 bytes
 (epstopdf)             Command: <repstopdf --outfile=Runtime_kosarak-eps-converted-to.pdf Runtime_kosarak.eps>
-(epstopdf)             \includegraphics on input line 933.
+(epstopdf)             \includegraphics on input line 1209.
 Package epstopdf Info: Output file is already uptodate.
-<Runtime_kosarak-eps-converted-to.pdf, id=44, 578.16pt x 578.16pt>
+<Runtime_kosarak-eps-converted-to.pdf, id=68, 578.16pt x 578.16pt>
 File: Runtime_kosarak-eps-converted-to.pdf Graphic file (type pdf)
 <use Runtime_kosarak-eps-converted-to.pdf>
-Package pdftex.def Info: Runtime_kosarak-eps-converted-to.pdf  used on input line 933.
-(pdftex.def)             Requested size: 142.26378pt x 142.26357pt.
+Package pdftex.def Info: Runtime_kosarak-eps-converted-to.pdf  used on input line 1209.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <Runtime_retail.eps>
 (epstopdf)                    date: 2020-05-30 18:06:43
 (epstopdf)                    size: 39548 bytes
@@ -807,13 +980,13 @@ Package epstopdf Info: Source file: <Runtime_retail.eps>
 (epstopdf)                    date: 2020-05-30 20:48:12
 (epstopdf)                    size: 20028 bytes
 (epstopdf)             Command: <repstopdf --outfile=Runtime_retail-eps-converted-to.pdf Runtime_retail.eps>
-(epstopdf)             \includegraphics on input line 939.
+(epstopdf)             \includegraphics on input line 1213.
 Package epstopdf Info: Output file is already uptodate.
-<Runtime_retail-eps-converted-to.pdf, id=45, 578.16pt x 578.16pt>
+<Runtime_retail-eps-converted-to.pdf, id=69, 578.16pt x 578.16pt>
 File: Runtime_retail-eps-converted-to.pdf Graphic file (type pdf)
 <use Runtime_retail-eps-converted-to.pdf>
-Package pdftex.def Info: Runtime_retail-eps-converted-to.pdf  used on input line 939.
-(pdftex.def)             Requested size: 142.26378pt x 142.26357pt.
+Package pdftex.def Info: Runtime_retail-eps-converted-to.pdf  used on input line 1213.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
 Package epstopdf Info: Source file: <Runtime_T10I4D100K.eps>
 (epstopdf)                    date: 2020-05-30 18:06:44
 (epstopdf)                    size: 39728 bytes
@@ -821,14 +994,18 @@ Package epstopdf Info: Source file: <Runtime_T10I4D100K.eps>
 (epstopdf)                    date: 2020-05-30 20:48:14
 (epstopdf)                    size: 20858 bytes
 (epstopdf)             Command: <repstopdf --outfile=Runtime_T10I4D100K-eps-converted-to.pdf Runtime_T10I4D100K.eps>
-(epstopdf)             \includegraphics on input line 945.
+(epstopdf)             \includegraphics on input line 1217.
 Package epstopdf Info: Output file is already uptodate.
-<Runtime_T10I4D100K-eps-converted-to.pdf, id=46, 578.16pt x 578.16pt>
+<Runtime_T10I4D100K-eps-converted-to.pdf, id=70, 578.16pt x 578.16pt>
 File: Runtime_T10I4D100K-eps-converted-to.pdf Graphic file (type pdf)
 <use Runtime_T10I4D100K-eps-converted-to.pdf>
-Package pdftex.def Info: Runtime_T10I4D100K-eps-converted-to.pdf  used on input line 945.
-(pdftex.def)             Requested size: 142.26378pt x 142.26357pt.
- [6]
+Package pdftex.def Info: Runtime_T10I4D100K-eps-converted-to.pdf  used on input line 1217.
+(pdftex.def)             Requested size: 128.0374pt x 128.03368pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1320--1321
+[]\OT1/ptm/m/n/8 Frequent Item-set Min-ing Im-ple-men-ta-tions Repos-i-tory.
+ []
+
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -840,22 +1017,20 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[7
-
- <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_BMS1-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_BMS2-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_BMS-POS-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_kosarak-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_retail-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_T10I4D100K-eps-converted-to.pdf>] [8 <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_BMS1-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_BMS2-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_BMS-POS-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_kosarak-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_retail-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_T10I4D100K-eps-converted-to.pdf>] (c:/Users/607/Desktop/Research/DPCFP/conference_paper/conference_101719.aux) ) 
+[9] [10 <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_BMS1-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_BMS2-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_BMS-POS-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_kosarak-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_retail-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/F-score_T10I4D100K-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Precision_BMS1-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Precision_BMS2-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Precision_BMS-POS-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Precision_kosarak-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Precision_retail-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Precision_T10I4D100K-eps-converted-to.pdf>] [11 <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Recall_BMS1-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Recall_BMS2-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Recall_BMS-POS-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Recall_kosarak-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Recall_retail-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Recall_T10I4D100K-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_BMS1-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_BMS2-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_BMS-POS-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_kosarak-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_retail-eps-converted-to.pdf> <c:/Users/607/Desktop/Research/DPCFP/conference_paper/Runtime_T10I4D100K-eps-converted-to.pdf>] (c:/Users/607/Desktop/Research/DPCFP/conference_paper/conference_101719.aux) ) 
 Here is how much of TeX's memory you used:
- 28966 strings out of 481242
- 652094 string characters out of 5921895
- 903911 words of memory out of 5000000
- 43863 multiletter control sequences out of 15000+600000
- 573755 words of font info for 109 fonts, out of 8000000 for 9000
+ 29289 strings out of 481242
+ 658424 string characters out of 5921895
+ 909140 words of memory out of 5000000
+ 44173 multiletter control sequences out of 15000+600000
+ 574862 words of font info for 110 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 141i,12n,164p,1667b,2697s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 142i,14n,164p,1667b,2691s stack positions out of 5000i,500n,10000p,200000b,80000s
 {d:/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}<d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><d:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><d:/texlive/2019/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><d:/texlive/2019/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><d:/texlive/2019/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><d:/texlive/2019/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on c:/Users/607/Desktop/Research/DPCFP/conference_paper/conference_101719.pdf (8 pages, 396375 bytes).
+Output written on c:/Users/607/Desktop/Research/DPCFP/conference_paper/conference_101719.pdf (11 pages, 613066 bytes).
 PDF statistics:
- 591 PDF objects out of 1000 (max. 8388607)
- 120 compressed objects within 2 object streams
+ 1082 PDF objects out of 1200 (max. 8388607)
+ 174 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 73 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 133 words of extra memory for PDF output out of 10000 (max. 10000000)
 

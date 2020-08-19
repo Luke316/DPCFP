@@ -15,7 +15,7 @@ class MIStree():
         self.header_table = {}
         self.root = MISTreeNode([],0)#name,sup
 
-    def AddTransaction(self,transaction,n,epsilon,length):
+    def AddTransaction(self,transaction,n,epsilon):
         node = self.root
         for item in transaction:
             next_node = node.SearchChildNode(item)
@@ -75,12 +75,13 @@ class MISTreeNode(TreeNodeBase,NodeMixin):
     def SearchChildNode(self,item):
         # node_names =[]
         for node in self.children:
-            # node_names.append([node.name])
-            # print('item=',item,'node.name=',node.name)
             if item == node.name:
                 return node
+            # node_names.append([node.name])
+            # print('item=',item,'node.name=',node.name)
             # if [item] in node_names:
-            #     return self.children[node_names.index([item])]
+                # print('return:',self.children[node_names.index([item])].name)
+                # return self.children[node_names.index([item])]
 
         return False
 
@@ -102,6 +103,8 @@ def CFPGrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
                 itemset = prefix +items
                 itemset.sort()                
                 frequent_itemsets[str(itemset)]= support[items[0]]
+                # pdb.set_trace()
+                # print(itemset,support[items[0]])
         else: 
             cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS)
     else:
@@ -112,7 +115,11 @@ def cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
     items = list(tree.header_table.keys())
     for item in items:  
         MIS = MISTable[item] if(len(prefix))==0 else MISTable[prefix[-1]]
-        
+        # support=0 
+        # for node in tree.header_table[item]:
+        #     support += node.sup
+        # if support <MIS:
+        #     continue
         if support[item]<MIS:
             continue
                     
@@ -122,7 +129,8 @@ def cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
             i.append(item)
             itemset = prefix+i
             itemset.sort()
-            frequent_itemsets[str(itemset)]= betaSup          
+            frequent_itemsets[str(itemset)]= betaSup
+            # pdb.set_trace()        
         
         #add beta's prefixPaths a.k.a conditional pattern base
         prefixPaths = []#list of path tuples
@@ -156,22 +164,21 @@ def cfpgrowth(tree,prefix,prefixSup,MISTable,support,frequent_itemsets,LMS):
             beta.insert(0,item)
             CFPGrowth(betaTree,beta,betaSup,MISTable,supportBeta,frequent_itemsets,LMS)
 
-
-
 if __name__ == '__main__':
-    dataset = 'retail'
+    dataset = 'BMS-POS'
     print('Dataset = ' ,dataset)
     time_start1 = time()
     T, n = ReadDataset(dataset)
-    ep_1,ep_2,ep_3 = 0.05,0.92,1.38  #0.02,0.03 #0.2,0.3 #0.38,0.57 #0.56,0.84 #0.74,1.11 #0.92,1.38
+    ep_1,ep_2,ep_3 = 0.01,0.09*0.4,0.09*0.6  #0.02,0.03 #0.2,0.3 #0.38,0.57 #0.56,0.84 #0.74,1.11 #0.92,1.38
+    # ep_1,ep_2,ep_3 = 0.05,0.92,1.38
     print(ep_1,ep_2,ep_3)
     #T10I4D100K retail kosarak BMS1 BMS2 BMS-POS
-    truncatedT, items, truncated_length = TruncateDatabase(T,ep_1,n)
+    truncatedT, truncatedT2, items, truncated_length = TruncateDatabase(T,ep_1,n)
     print("truncated_length=",truncated_length)
 
     sorted_MIS_table, support, LMS = MISTable(truncatedT,items,n,ep_2,truncated_length,0.01,0.25)
     print("LMS=",LMS)
-    final_sorted_transactions = SortTransactions(truncatedT,sorted_MIS_table)
+    final_sorted_transactions = SortTransactions(truncatedT2,sorted_MIS_table)
     print('MIS Found and Transactions Sorted. Running time: {:.3f} seconds.'.format(time()-time_start1))
 
 
@@ -179,7 +186,7 @@ if __name__ == '__main__':
     master = MIStree()
     # print(final_sorted_transactions)
     for transaction in final_sorted_transactions:
-        master.AddTransaction(transaction,n,ep_3,truncated_length)
+        master.AddTransaction(transaction,n,ep_3)
     time_used = time() - time_start
     print('FPMISTree Constructed. Running time: {:.3f} seconds.'.format(time_used))
     
@@ -196,5 +203,15 @@ if __name__ == '__main__':
     #     for key in frequent_itemsets.keys():
     #         f.write("%s,%s\n"%(key,frequent_itemsets[key]))
     time_used = time() - time_start
+    # pdb.set_trace()
     print('CFPGrowth++ Finished . Running time: {:.3f} seconds.'.format(time_used))
     print('Total Running time: {:.3f} seconds.'.format(time()-time_start1))
+    
+    # itemsets=0
+    # for itemset in list(frequent_itemsets.keys()):
+    #     # print(list(itemset))
+    #     itemsetlist = itemset.split(',')
+    #     if len(list(itemsetlist))==1:
+    #         print(itemset)
+    #         itemsets+=1
+    # print(itemsets)
