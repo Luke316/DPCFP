@@ -6,9 +6,13 @@ import pdb
     
 def compare(dataset,eps):
     non_private = {}
+<<<<<<< HEAD
     # NP_dataset='..\\reports\\ground_truth\\' + dataset + '_apriori_without_phi.csv'
     NP_dataset='..\\reports\\ground_truth\\single_threshold\\' + dataset + '.csv'
 
+=======
+    NP_dataset='..\\reports\\ground_truth\\' + dataset + '_apriori_without_phi.csv'
+>>>>>>> 70814a6519b741909892267185ca3b08daa35fbf
     with open(NP_dataset, "r") as f:
         result = csv.reader(f)
         for lines in result:
@@ -38,7 +42,10 @@ def compare(dataset,eps):
 
         with open(P_dataset, "r") as f:
             result = csv.reader(f)
+<<<<<<< HEAD
             n=len(result)
+=======
+>>>>>>> 70814a6519b741909892267185ca3b08daa35fbf
             for lines in result:
                 # print(lines)
                 if float(lines[1])>minsup:
@@ -46,7 +53,11 @@ def compare(dataset,eps):
 
         a = set(private).intersection(non_private)
         # print(a)
+<<<<<<< HEAD
         precision = len(a)/len(n)
+=======
+        precision = len(a)/len(private)
+>>>>>>> 70814a6519b741909892267185ca3b08daa35fbf
         recall = len(a)/len(non_private)
         if (precision+recall) != 0:
             F_score = 2*(precision*recall)/(precision+recall)
@@ -56,7 +67,11 @@ def compare(dataset,eps):
         sum_precision += precision
         sum_recall += recall
         sum_fscore += F_score
+<<<<<<< HEAD
         sum_number += len(n)
+=======
+        sum_number += len(private)
+>>>>>>> 70814a6519b741909892267185ca3b08daa35fbf
 
 
     print('Dataset ===== ',dataset)
@@ -64,8 +79,12 @@ def compare(dataset,eps):
     print('Recall =', sum_recall/10)
     print('F-Score =', sum_fscore/10)
 
+<<<<<<< HEAD
     # with open ('..\\..\\PrivBasis_python3\\reports\\' +dataset+'_eps_' + str(eps)+'.txt',  'w', newline='') as f:
     with open ('..\\..\\PrivBasis_python3\\reports\\single_threshold\\' +dataset+'_eps_' + str(eps)+'.txt',  'w', newline='') as f:
+=======
+    with open ('..\\..\\PrivBasis_python3\\reports\\' +dataset+'_eps_' + str(eps)+'.txt',  'w', newline='') as f:
+>>>>>>> 70814a6519b741909892267185ca3b08daa35fbf
         writer = csv.writer(f)
         writer.writerow(['K         ','k'])
         writer.writerow(['Epsilons  ','{:.14f}'.format(eps)])

@@ -104,6 +104,7 @@ def TruncateDatabase(dataset,epsilon,n):
     
     summation =0.0
     truncated_length = 0.0
+<<<<<<< HEAD
     truncated_length2= 0.0
     b = False #make sure loop continue without changing truncated_length
     for index, noisy_count in enumerate(noisy_length_distribution, start=1) :
@@ -132,10 +133,25 @@ def TruncateDatabase(dataset,epsilon,n):
     #time_used = time() - time_start
     #print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
     return T_truncated,T_truncated2 , items, truncated_length
+=======
+    for index, noisy_count in enumerate(noisy_length_distribution, start=1) :
+        summation += noisy_count
+        if summation >= (0.85):
+            truncated_length = index
+            break
+    
+    #print('truncated_length=',truncated_length)
+    T_truncated= Truncate(truncated_length,dataset) 
+    
+    #time_used = time() - time_start
+    #print('Truncate Database. Running time: {:.3f} seconds.'.format(time_used))
+    return T_truncated, items, truncated_length
+>>>>>>> 70814a6519b741909892267185ca3b08daa35fbf
 
 
 if __name__ == '__main__': #if file wasn't imported.
     #D_name = 'accidents'
+<<<<<<< HEAD
     # D_name = 'kosarak'
     D = ['BMS1', 'BMS2','retail','kosarak','BMS-POS','T10I4D100K']
     # To clarify, the initial dataset is called D
@@ -143,4 +159,12 @@ if __name__ == '__main__': #if file wasn't imported.
     for D_name in D:
         T, n = ReadDataset(D_name)
         truncatedT,truncatedT2, items, truncated_length = TruncateDatabase(T,0.05,n)
+=======
+    D_name = 'T10I4D100K'
+
+    # To clarify, the initial dataset is called D
+    # after reading the dataset, I call it T
+    T, n = ReadDataset(D_name)
+    truncatedT, items, truncated_length = TruncateDatabase(T,0.05,n)
+>>>>>>> 70814a6519b741909892267185ca3b08daa35fbf
 
